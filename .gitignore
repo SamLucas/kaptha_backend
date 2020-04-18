@@ -8,3 +8,4 @@ yarn.lock
 .env
 
 db.sqlite
+db.sqlite-journal
