@@ -6,13 +6,15 @@ import FRCancerEquivalenceTerms from '@/Utils/ReadFiles/cancerEquivalenceTerms'
 import FRChemicalEquivalenceTerms from '@/Utils/ReadFiles/chemicalEquivalenceTerms'
 import FRIndexPolifenols from '@/Utils/ReadFiles/indexPolifenols'
 import FRArticlesTotal from '@/Utils/ReadFiles/articlesTotal'
+import FRRuleAssociationsExtracted from '@/Utils/ReadFiles/ruleAssociationsExtracted'
 
 const FuctionsArray = [
   FRIndexCancers,
   FRCancerEquivalenceTerms,
   FRChemicalEquivalenceTerms,
   FRIndexPolifenols,
-  FRArticlesTotal
+  FRArticlesTotal,
+  FRRuleAssociationsExtracted
 ]
 
 const IndexFunctions = {
@@ -20,7 +22,8 @@ const IndexFunctions = {
   cancerEquivalenceTerms: 1,
   chemicalEquivalenceTerms: 2,
   indexPolifenols: 3,
-  articlesTotal: 4
+  articlesTotal: 4,
+  ruleAssociationsExtracted: 5
 }
 
 const store = async (req: Request, res: Response): Promise<Response> => {
