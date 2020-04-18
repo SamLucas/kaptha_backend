@@ -6,7 +6,7 @@ interface DRChemicalEquivalenceTerms {
   idterm_descritor: string;
 }
 
-export default function FRCancerEquivalenceTerms (data: DRChemicalEquivalenceTerms[]): void {
+export default function FRChemicalEquivalenceTerms (data: DRChemicalEquivalenceTerms[]): void {
   data.forEach((dataInfo: DRChemicalEquivalenceTerms) => {
     const { idequivalence_relationship, equivalence_term, idterm_descritor } = dataInfo
 
