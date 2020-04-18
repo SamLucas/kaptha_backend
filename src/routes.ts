@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
-import ReadFile from '@/controllers/ReadFilesController'
+import ReadFiles from '@/Utils/ReadFiles'
 
 export const Routes = Router()
 
-Routes.post('/read_file', ReadFile.store)
+Routes.post('/read_file', ReadFiles.store)
