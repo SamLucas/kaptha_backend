@@ -3,12 +3,14 @@ import fs from 'fs'
 
 import FRIndexCancers from '@/Utils/ReadFiles/indexCancers'
 import FRCancerEquivalenceTerms from '@/Utils/ReadFiles/cancerEquivalenceTerms'
+import FRChemicalEquivalenceTerms from '@/Utils/ReadFiles/chemicalEquivalenceTerms'
 
-const FuctionsArray = [FRIndexCancers, FRCancerEquivalenceTerms]
+const FuctionsArray = [FRIndexCancers, FRCancerEquivalenceTerms, FRChemicalEquivalenceTerms]
 
 const IndexFunctions = {
   indexCancers: 0,
-  cancerEquivalenceTerms: 1
+  cancerEquivalenceTerms: 1,
+  chemicalEquivalenceTerms: 2
 }
 
 const store = async (req: Request, res: Response): Promise<Response> => {
@@ -24,7 +26,7 @@ const store = async (req: Request, res: Response): Promise<Response> => {
 
   FuctionsArray[index](data)
 
-  return res.json({ ok: 'ok' })
+  return res.json({ message: 'Dados inseridos com sucesso.' })
 }
 
 export default { store }
