@@ -1,0 +1,10 @@
+node_modules
+backup
+build 
+
+yarn-error.log
+yarn.lock
+
+.env
+
+db.sqlite
