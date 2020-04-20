@@ -6,16 +6,16 @@ interface DRCancerEquivalenceTerms {
   idterm_descritor: string;
 }
 
-export default function FRCancerEquivalenceTerms (data: DRCancerEquivalenceTerms[]): void {
-  data.forEach((dataInfo: DRCancerEquivalenceTerms) => {
-    const { idequivalence_relationship, equivalence_term, idterm_descritor } = dataInfo
+export default async function FRCancerEquivalenceTerms (data: DRCancerEquivalenceTerms[]): Promise<void> {
+  const dataFilter: DRCancerEquivalenceTerms[] = data.map((dataInfo: DRCancerEquivalenceTerms) =>
+    ({
+      idequivalence_relationship: dataInfo.idequivalence_relationship,
+      equivalence_term: dataInfo.equivalence_term,
+      idterm_descritor: dataInfo.idterm_descritor
+    }))
 
-    knex('cancerEquivalenceTerms').insert({
-      idequivalence_relationship,
-      equivalence_term,
-      idterm_descritor
-    })
-      .then(data => data)
-      .catch(err => console.log(err))
-  })
+  await knex
+    .batchInsert('cancerEquivalenceTerms', dataFilter, 1)
+    .then((data) => data)
+    .catch((err) => console.log(err.stack))
 }

@@ -6,20 +6,16 @@ interface DRArticlesTotal {
   pmid: string;
 }
 
-export default function FRArticlesTotal (data: DRArticlesTotal[]): void {
-  data.forEach((dataInfo: DRArticlesTotal) => {
-    const {
-      title_article,
-      abstract_article,
-      pmid
-    } = dataInfo
-
-    knex('articlesTotal').insert({
-      title_article,
-      abstract_article,
-      pmid
+export default async function FRArticlesTotal (data: DRArticlesTotal[]): Promise<void> {
+  const dataFilter: DRArticlesTotal[] = data.map((dataInfo: DRArticlesTotal) =>
+    ({
+      title_article: dataInfo.title_article || '',
+      abstract_article: dataInfo.abstract_article || '',
+      pmid: dataInfo.pmid || ''
     })
-      .then(data => data)
-      .catch(err => console.log(err))
-  })
+  )
+
+  await knex.batchInsert('articlesTotal', dataFilter, 1)
+    .then(data => data)
+    .catch(err => console.log(err))
 }

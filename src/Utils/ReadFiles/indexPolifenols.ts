@@ -9,26 +9,18 @@ interface DRIndexPolifenols {
   ration: number;
 }
 
-export default function FRIndexPolifenols (data: DRIndexPolifenols[]): void {
-  data.forEach((dataInfo: DRIndexPolifenols) => {
-    const {
-      poliphenol,
-      id_term,
-      total_ocorrence,
-      unique_ocorrence,
-      pmids,
-      ration
-    } = dataInfo
+export default async function FRIndexPolifenols (data: DRIndexPolifenols[]): Promise<void> {
+  const dataFilter: DRIndexPolifenols[] = data.map((dataInfo: DRIndexPolifenols) => ({
+    poliphenol: dataInfo.poliphenol,
+    id_term: dataInfo.id_term,
+    total_ocorrence: dataInfo.total_ocorrence,
+    unique_ocorrence: dataInfo.unique_ocorrence,
+    pmids: dataInfo.pmids,
+    ration: dataInfo.ration
+  }))
 
-    knex('indexPolifenols').insert({
-      poliphenol,
-      id_term,
-      total_ocorrence,
-      unique_ocorrence,
-      pmids,
-      ration
-    })
-      .then(data => data)
-      .catch(err => console.log(err))
-  })
+  await knex
+    .batchInsert('indexPolifenols', dataFilter, 1)
+    .then((data) => data)
+    .catch((err) => console.log(err.stack))
 }

@@ -12,6 +12,7 @@
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
+    "downlevelIteration": true,
     "paths": {
       "@/*": ["./*"]
     }

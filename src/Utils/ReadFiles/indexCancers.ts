@@ -9,26 +9,19 @@ interface DRIndexCancers {
   ration: number;
 }
 
-export default function FRIndexCancers (data: DRIndexCancers[]): void {
-  data.forEach((dataInfo: DRIndexCancers) => {
-    const {
-      cancer,
-      id_term,
-      total_ocorrence,
-      unique_ocorrence,
-      pmids,
-      ration
-    } = dataInfo
+export default async function FRIndexCancers (data: DRIndexCancers[]): Promise<void> {
+  const dataFilter: DRIndexCancers[] = data.map((dataInfo: DRIndexCancers) => ({
+    cancer: dataInfo.cancer,
+    id_term: dataInfo.id_term,
+    total_ocorrence: dataInfo.total_ocorrence,
+    unique_ocorrence: dataInfo.unique_ocorrence,
+    pmids: dataInfo.pmids,
+    ration: dataInfo.ration
 
-    knex('indexCancers').insert({
-      cancer,
-      id_term,
-      total_ocorrence,
-      unique_ocorrence,
-      pmids,
-      ration
-    })
-      .then(data => data)
-      .catch(err => console.log(err))
-  })
+  }))
+
+  await knex
+    .batchInsert('indexCancers', dataFilter, 1)
+    .then((data) => data)
+    .catch((err) => console.log(err.stack))
 }

@@ -27,19 +27,21 @@ const IndexFunctions = {
 }
 
 const store = async (req: Request, res: Response): Promise<Response> => {
-  const { name } = req.body
+  const { name, page } = req.body
 
-  const file = fs.readFileSync(`./backup/${name}.json`, 'utf8')
+  const nameFile = `${name}${page ? '-' + page : ''}`
+  const file = JSON.parse(fs.readFileSync(`./backup/${nameFile}.json`, 'utf8'))
+
   if (!file) return res.status(401).json({ message: 'Arquivo não encontrado ou nome invalido.' })
 
-  const data = JSON.parse(file)
+  const data = file
 
   const keyIndexFunctions: keyof typeof IndexFunctions = name
   const index = IndexFunctions[keyIndexFunctions]
 
-  FuctionsArray[index](data)
+  await FuctionsArray[index](data)
 
-  return res.json({ message: 'Dados inseridos com sucesso.' })
+  return res.json({ message: `Dados inseridos com sucesso! (${nameFile} - ${data.length} registros)` })
 }
 
 export default { store }

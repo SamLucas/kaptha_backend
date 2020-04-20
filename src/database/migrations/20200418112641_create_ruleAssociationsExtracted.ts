@@ -37,8 +37,8 @@ export async function up (knex: Knex): Promise<any> {
     table.text('sentence').notNullable()
     table.text('original_sentence').notNullable()
 
-    table.integer('pmid').unsigned().notNullable()
-    table.foreign('pmid').references('pmid').inTable('articlesTotal')
+    table.integer('pmid_article').unsigned().notNullable()
+    table.foreign('pmid_article').references('pmid').inTable('articlesTotal')
 
     table.timestamps(true, true)
   })

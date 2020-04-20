@@ -37,83 +37,90 @@ interface DRRuleAssociationsExtracted {
   pmid: string;
 }
 
-export default function FRRuleAssociationsExtracted (data: DRRuleAssociationsExtracted[]): void {
-  console.log(data.length)
-  data.forEach((dataInfo: DRRuleAssociationsExtracted) => {
-    const {
-      sentence_id,
-      association_type,
-      R1,
-      R2,
-      R3,
-      R4,
-      R5,
-      R6,
-      R7,
-      R8,
-      R9,
-      R10,
-      R11,
-      R12,
-      R13,
-      R14,
-      R15,
-      HM12,
-      HM3,
-      HM4,
-      HM5,
-      HM6,
-      HM7,
-      HM8,
-      HM9,
-      HM10,
-      is_title,
-      has_entity,
-      is_association,
-      start_pos,
-      end_pos,
-      sentence,
-      original_sentence,
-      pmid
-    } = dataInfo
+interface DRRuleAssociationsExtractedArray {
+  pmid_article: string;
+  sentence_id: number;
+  association_type: string;
+  R1: string;
+  R2: string;
+  R3: string;
+  R4: string;
+  R5: string;
+  R6: string;
+  R7: string;
+  R8: string;
+  R9: string;
+  R10: string;
+  R11: string;
+  R12: string;
+  R13: string;
+  R14: string;
+  R15: string;
+  HM12: string;
+  HM3: string;
+  HM4: string;
+  HM5: string;
+  HM6: string;
+  HM7: string;
+  HM8: string;
+  HM9: string;
+  HM10: string;
+  is_title: string;
+  has_entity: string;
+  is_association: string;
+  start_pos: string;
+  end_pos: string;
+  sentence: string;
+  original_sentence: string;
+}
 
-    knex('ruleAssociationsExtracted').insert({
-      sentence_id,
-      association_type,
-      R1,
-      R2,
-      R3,
-      R4,
-      R5,
-      R6,
-      R7,
-      R8,
-      R9,
-      R10,
-      R11,
-      R12,
-      R13,
-      R14,
-      R15,
-      HM12,
-      HM3,
-      HM4,
-      HM5,
-      HM6,
-      HM7,
-      HM8,
-      HM9,
-      HM10,
-      is_title,
-      has_entity,
-      is_association,
-      start_pos,
-      end_pos,
-      sentence,
-      original_sentence,
-      pmid
+export default async function FRRuleAssociationsExtracted (
+  data: DRRuleAssociationsExtracted[]
+): Promise<void> {
+  const dataFilter: DRRuleAssociationsExtractedArray[] = data.map(
+    (dataInfo: DRRuleAssociationsExtracted) => ({
+      sentence_id: dataInfo.sentence_id,
+      association_type: dataInfo.association_type,
+      R1: dataInfo.R1,
+      R2: dataInfo.R2,
+      R3: dataInfo.R3,
+      R4: dataInfo.R4,
+      R5: dataInfo.R5,
+      R6: dataInfo.R6,
+      R7: dataInfo.R7,
+      R8: dataInfo.R8,
+      R9: dataInfo.R9,
+      R10: dataInfo.R10,
+      R11: dataInfo.R11,
+      R12: dataInfo.R12,
+      R13: dataInfo.R13,
+      R14: dataInfo.R14,
+      R15: dataInfo.R15,
+      HM12: dataInfo.HM12,
+      HM3: dataInfo.HM3,
+      HM4: dataInfo.HM4,
+      HM5: dataInfo.HM5,
+      HM6: dataInfo.HM6,
+      HM7: dataInfo.HM7,
+      HM8: dataInfo.HM8,
+      HM9: dataInfo.HM9,
+      HM10: dataInfo.HM10,
+      is_title: dataInfo.is_title,
+      has_entity: dataInfo.has_entity,
+      is_association: dataInfo.is_association,
+      start_pos: dataInfo.start_pos,
+      end_pos: dataInfo.end_pos,
+      sentence: dataInfo.sentence,
+      original_sentence: dataInfo.original_sentence,
+      pmid_article: dataInfo.pmid
     })
-      .then(data => data)
-      .catch(err => console.log(err))
-  })
+  )
+
+  await knex
+    .batchInsert('ruleAssociationsExtracted', dataFilter, 1)
+    .then((data) => data)
+    .catch((err) => console.log(err.stack))
+
+  // ('ruleAssociationsExtracted').insert(dataFilter[0])
+  // console.log(dataFilter[0])
 }
