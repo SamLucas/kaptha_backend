@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import knex from '@/database/connection'
 
 const index = async (req: Request, res: Response): Promise<Response> => {
-  const { cancer, chemicals } = req.query
+  const { cancer, chemicals, page, limit } = req.query
 
   let PMDCancer = []
   let PMDchemicals = []
@@ -27,11 +27,16 @@ const index = async (req: Request, res: Response): Promise<Response> => {
 
   const Pmid = [...new Set([...PMDCancer, ...PMDchemicals])]
 
+  const [count] = await knex('articlesTotal')
+    .whereIn('pmid', Pmid).count()
+
+  res.header('X-Total-Count', count['count(*)'])
+
   await knex('articlesTotal')
     .whereIn('pmid', Pmid)
-    .limit(5)
+    .limit(limit)
+    .offset((page - 1) * limit)
     .select('*').then(async data => {
-      console.log(data)
       const articles = await Promise.all(data.map(async ele => {
         const response = await knex('ruleAssociationsExtracted')
           .where('pmid_article', ele.pmid)
