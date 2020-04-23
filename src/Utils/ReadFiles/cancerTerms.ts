@@ -1,6 +1,6 @@
 import knex from '@/database/connection'
 
-interface DRcancerTerms {
+interface DRCancerTerms {
   idterm_descritor: number;
   term_type_idterm_type: number;
   term_description: string;
@@ -9,15 +9,14 @@ interface DRcancerTerms {
   term_type_mesh: number;
 }
 
-export default async function FRCancerTerms (data: DRcancerTerms[]): Promise<void> {
-  const dataFilter: DRcancerTerms[] = data.map((dataInfo: DRcancerTerms) => ({
+export default async function FRCancerTerms (data: DRCancerTerms[]): Promise<void> {
+  const dataFilter: DRCancerTerms[] = data.map((dataInfo: DRCancerTerms) => ({
     idterm_descritor: dataInfo.idterm_descritor || 0,
     term_type_idterm_type: dataInfo.term_type_idterm_type || 0,
     term_description: dataInfo.term_description || '',
     term_definition: dataInfo.term_definition || '',
     link_wiki: dataInfo.link_wiki || '',
     term_type_mesh: dataInfo.term_type_mesh || 0
-
   }))
 
   await knex
