@@ -3,7 +3,7 @@ import knex from '@/database/connection'
 interface DRArticlesTotal {
   title_article: string;
   abstract_article: string;
-  pmid: string;
+  pmid: number;
 }
 
 export default async function FRArticlesTotal (data: DRArticlesTotal[]): Promise<void> {
@@ -11,7 +11,7 @@ export default async function FRArticlesTotal (data: DRArticlesTotal[]): Promise
     ({
       title_article: dataInfo.title_article || '',
       abstract_article: dataInfo.abstract_article || '',
-      pmid: dataInfo.pmid || ''
+      pmid: dataInfo.pmid || 0
     })
   )
 
