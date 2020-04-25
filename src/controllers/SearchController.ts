@@ -2,14 +2,14 @@ import { Request, Response } from 'express'
 import knex from '@/database/connection'
 
 const index = async (req: Request, res: Response): Promise<Response> => {
-  const { dataSeach = '', page = 1, limit = 4 } = req.query
+  const { dataSearch = '', page = 1, limit = 4 } = req.query
 
   let PMDCancer = []
   let PMDchemicals = []
 
-  const terms = dataSeach.split(', ')
+  const terms = dataSearch.split(', ')
 
-  if (dataSeach) {
+  if (dataSearch) {
     PMDCancer = await knex('cancerEquivalenceTerms')
       .join('indexCancers', 'id_term', '=', 'idterm_descritor')
       .whereIn('equivalence_term', terms)
