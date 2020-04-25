@@ -7,7 +7,7 @@ export async function up (knex: Knex): Promise<any> {
     table.string('equivalence_term').notNullable()
 
     table.integer('idterm_descritor').unsigned().notNullable()
-    // table.foreign('idterm_descritor').references('id_term').inTable('indexPolifenols')
+    table.foreign('idterm_descritor').references('id_term').inTable('indexPolifenols')
 
     table.timestamps(true, true)
   })
