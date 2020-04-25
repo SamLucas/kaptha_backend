@@ -8,3 +8,7 @@ export const Routes = Router()
 Routes.post('/read_file', ReadFiles.store)
 
 Routes.get('/search', SeachController.index)
+
+Routes.get('/status', (req, res) => {
+  return res.json({ message: 'Servidor esta funcionando.' })
+})
