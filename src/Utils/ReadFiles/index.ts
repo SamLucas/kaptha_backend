@@ -31,6 +31,7 @@ const IndexFunctions = {
   cancerTerms: 6,
   chemicalTerms: 7
 }
+// [cancerEquivalenceTerms, chemicalEquivalenceTerms, articlesTotal,ruleAssociationsExtracted]
 
 const store = async (req: Request, res: Response): Promise<Response> => {
   const { name, page } = req.body
