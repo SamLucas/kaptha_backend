@@ -9,9 +9,9 @@ interface DRCancerEquivalenceTerms {
 export default async function FRCancerEquivalenceTerms (data: DRCancerEquivalenceTerms[]): Promise<void> {
   const dataFilter: DRCancerEquivalenceTerms[] = data.map((dataInfo: DRCancerEquivalenceTerms) =>
     ({
-      idequivalence_relationship: dataInfo.idequivalence_relationship,
-      equivalence_term: dataInfo.equivalence_term,
-      idterm_descritor: dataInfo.idterm_descritor
+      idequivalence_relationship: dataInfo.idequivalence_relationship || '',
+      equivalence_term: dataInfo.equivalence_term || '',
+      idterm_descritor: dataInfo.idterm_descritor || ''
     }))
 
   await knex

@@ -36,10 +36,13 @@
     "dotenv": "^8.2.0",
     "express": "^4.15.4",
     "knex": "^0.20.13",
+    "mysql": "^2.18.1",
+    "pd": "^0.8.1",
     "sqlite3": "^4.1.1"
   },
   "scripts": {
     "dev": "nodemon src/server.ts",
-    "build": "babel src --out-dir build --extensions \".ts,.tsx\" --source-maps inline"
+    "build": "babel src --out-dir build --extensions \".ts,.tsx\" --source-maps inline",
+    "start": "node ./build/server.js"
   }
 }

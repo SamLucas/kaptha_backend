@@ -1,8 +1,8 @@
 // import 'sucrase/register'
 // import 'dotenv/config'
 
-require('sucrase/register')
-require('dotenv/config')
+import 'sucrase/register'
+import 'dotenv/config'
 
 const EvironmentConfig = {
   test: {
@@ -54,4 +54,4 @@ const EvironmentConfig = {
   }
 }
 
-module.exports = EvironmentConfig[process.env.ENVIRONMENT]
+export default EvironmentConfig[process.env.ENVIRONMENT]
