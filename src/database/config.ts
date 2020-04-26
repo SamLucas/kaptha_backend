@@ -17,13 +17,13 @@ const EvironmentConfig = {
     useNullAsDefault: false
   },
   development: {
-    client: process.env.CLIENT,
+    client: process.env.BD_CLIENT,
     connection: {
-      host: process.env.HOST,
-      database: process.env.DATABASE,
-      user: process.env.USER,
-      password: process.env.PASSWORD,
-      port: process.env.PORT
+      host: process.env.BD_HOST,
+      database: process.env.BD_DATABASE,
+      user: process.env.BD_USER,
+      password: process.env.BD_PASSWORD,
+      port: process.env.BD_PORT
     },
     pool: {
       min: 2,
@@ -35,13 +35,13 @@ const EvironmentConfig = {
     }
   },
   production: {
-    client: process.env.CLIENT,
+    client: process.env.BD_CLIENT,
     connection: {
-      host: process.env.HOST,
-      database: process.env.DATABASE,
-      user: process.env.USER,
-      password: process.env.PASSWORD,
-      port: process.env.PORT
+      host: process.env.BD_HOST,
+      database: process.env.BD_DATABASE,
+      user: process.env.BD_USER,
+      password: process.env.BD_PASSWORD,
+      port: process.env.BD_PORT
     },
     pool: {
       min: 2,
