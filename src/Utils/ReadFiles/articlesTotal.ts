@@ -7,13 +7,16 @@ interface DRArticlesTotal {
 }
 
 export default async function FRArticlesTotal (data: DRArticlesTotal[]): Promise<void> {
-  const dataFilter: DRArticlesTotal[] = data.map((dataInfo: DRArticlesTotal) =>
-    ({
-      title_article: dataInfo.title_article || '',
-      abstract_article: dataInfo.abstract_article || '',
-      pmid: dataInfo.pmid || 0
-    })
-  )
+  const dataFilter: DRArticlesTotal[] = []
+  data.forEach((dataInfo: DRArticlesTotal) => {
+    if (dataInfo.pmid) {
+      dataFilter.push({
+        title_article: dataInfo.title_article || '',
+        abstract_article: dataInfo.abstract_article || '',
+        pmid: dataInfo.pmid
+      })
+    }
+  })
 
   await knex.batchInsert('articlesTotal', dataFilter, 1)
     .then(data => data)
