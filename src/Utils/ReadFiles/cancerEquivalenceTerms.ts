@@ -26,8 +26,6 @@ export default async function FRCancerEquivalenceTerms (data: DRCancerEquivalenc
         equivalence_term: dataInfo.equivalence_term || '',
         id_term: dataInfo.idterm_descritor
       })
-      console.log(dataInfo)
-    } else {
     }
   })
 
