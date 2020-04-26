@@ -3,7 +3,7 @@ import * as Knex from 'knex'
 export async function up (knex: Knex): Promise<any> {
   return knex.schema.createTable('ruleAssociationsExtracted', table => {
     table.increments('id').primary()
-    table.integer('sentence_id').notNullable()
+    table.string('sentence_id').notNullable()
     table.string('association_type').notNullable()
     table.string('R1').notNullable()
     table.string('R2').notNullable()
@@ -37,7 +37,7 @@ export async function up (knex: Knex): Promise<any> {
     table.text('sentence').notNullable()
     table.text('original_sentence').notNullable()
 
-    table.integer('pmid_article').notNullable()
+    table.integer('pmid_article', 11).notNullable()
     table.foreign('pmid_article')
       .references('pmid')
       .inTable('articlesTotal')

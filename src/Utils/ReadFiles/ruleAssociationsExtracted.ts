@@ -1,7 +1,11 @@
 import knex from '@/database/connection'
+import fs from 'fs'
+import path from 'path'
+
+import { DRArticlesTotal } from './articlesTotal'
 
 interface DRRuleAssociationsExtracted {
-  sentence_id: number;
+  sentence_id: string;
   association_type: string;
   R1: string;
   R2: string;
@@ -38,8 +42,8 @@ interface DRRuleAssociationsExtracted {
 }
 
 interface DRRuleAssociationsExtractedArray {
-  pmid_article: string;
-  sentence_id: number;
+  pmid_article: number;
+  sentence_id: string;
   association_type: string;
   R1: string;
   R2: string;
@@ -74,53 +78,67 @@ interface DRRuleAssociationsExtractedArray {
   original_sentence: string;
 }
 
+interface DIds {
+  pmid: number;
+}
+
 export default async function FRRuleAssociationsExtracted (
   data: DRRuleAssociationsExtracted[]
 ): Promise<void> {
-  const dataFilter: DRRuleAssociationsExtractedArray[] = data.map(
-    (dataInfo: DRRuleAssociationsExtracted) => ({
-      sentence_id: dataInfo.sentence_id,
-      association_type: dataInfo.association_type,
-      R1: dataInfo.R1,
-      R2: dataInfo.R2,
-      R3: dataInfo.R3,
-      R4: dataInfo.R4,
-      R5: dataInfo.R5,
-      R6: dataInfo.R6,
-      R7: dataInfo.R7,
-      R8: dataInfo.R8,
-      R9: dataInfo.R9,
-      R10: dataInfo.R10,
-      R11: dataInfo.R11,
-      R12: dataInfo.R12,
-      R13: dataInfo.R13,
-      R14: dataInfo.R14,
-      R15: dataInfo.R15,
-      HM12: dataInfo.HM12,
-      HM3: dataInfo.HM3,
-      HM4: dataInfo.HM4,
-      HM5: dataInfo.HM5,
-      HM6: dataInfo.HM6,
-      HM7: dataInfo.HM7,
-      HM8: dataInfo.HM8,
-      HM9: dataInfo.HM9,
-      HM10: dataInfo.HM10,
-      is_title: dataInfo.is_title,
-      has_entity: dataInfo.has_entity,
-      is_association: dataInfo.is_association,
-      start_pos: dataInfo.start_pos,
-      end_pos: dataInfo.end_pos,
-      sentence: dataInfo.sentence,
-      original_sentence: dataInfo.original_sentence,
-      pmid_article: dataInfo.pmid
-    })
+  const ids: DIds[] = JSON.parse(
+    fs.readFileSync(
+      './src/Utils/ReadFiles/utils/id_articleTotals.json',
+      'utf8'
+    )
   )
+
+  const dataFilter: DRRuleAssociationsExtractedArray[] = []
+
+  data.forEach((dataInfo: DRRuleAssociationsExtracted) => {
+    if (ids.find((ele: DIds) => ele.pmid === dataInfo.pmid)) {
+      dataFilter.push({
+        sentence_id: dataInfo.sentence_id,
+        association_type: dataInfo.association_type,
+        R1: dataInfo.R1,
+        R2: dataInfo.R2,
+        R3: dataInfo.R3,
+        R4: dataInfo.R4,
+        R5: dataInfo.R5,
+        R6: dataInfo.R6,
+        R7: dataInfo.R7,
+        R8: dataInfo.R8,
+        R9: dataInfo.R9,
+        R10: dataInfo.R10,
+        R11: dataInfo.R11,
+        R12: dataInfo.R12,
+        R13: dataInfo.R13,
+        R14: dataInfo.R14,
+        R15: dataInfo.R15,
+        HM12: dataInfo.HM12,
+        HM3: dataInfo.HM3,
+        HM4: dataInfo.HM4,
+        HM5: dataInfo.HM5,
+        HM6: dataInfo.HM6,
+        HM7: dataInfo.HM7,
+        HM8: dataInfo.HM8,
+        HM9: dataInfo.HM9,
+        HM10: dataInfo.HM10,
+        is_title: dataInfo.is_title,
+        has_entity: dataInfo.has_entity,
+        is_association: dataInfo.is_association,
+        start_pos: dataInfo.start_pos,
+        end_pos: dataInfo.end_pos,
+        sentence: dataInfo.sentence,
+        original_sentence: dataInfo.original_sentence,
+        pmid_article: parseInt(dataInfo.pmid)
+      })
+    }
+  })
+
+  console.log(dataFilter.length)
 
   await knex
     .batchInsert('ruleAssociationsExtracted', dataFilter, 1)
     .then((data) => data)
     .catch((err) => console.log(err.stack))
-
-  // ('ruleAssociationsExtracted').insert(dataFilter[0])
-  // console.log(dataFilter[0])
 }

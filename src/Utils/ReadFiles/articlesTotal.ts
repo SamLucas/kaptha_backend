@@ -1,6 +1,6 @@
 import knex from '@/database/connection'
 
-interface DRArticlesTotal {
+export interface DRArticlesTotal {
   title_article: string;
   abstract_article: string;
   pmid: number;
