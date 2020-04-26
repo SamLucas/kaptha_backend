@@ -15,7 +15,9 @@ class App {
 
     private middlewares (): void {
       this.express.use(express.json())
-      this.express.use(cors())
+      this.express.use(cors({
+        allowedHeaders: ['x-total-count', 'Content-Type']
+      }))
       this.express.use(morgan(`${process.env.MORGAN_TYPE}`))
     }
 
