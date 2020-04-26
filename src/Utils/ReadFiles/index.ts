@@ -23,15 +23,14 @@ const FuctionsArray = [
 
 const IndexFunctions = {
   indexCancers: 0,
+  indexPolifenols: 3,
   cancerEquivalenceTerms: 1,
   chemicalEquivalenceTerms: 2,
-  indexPolifenols: 3,
   articlesTotal: 4,
   ruleAssociationsExtracted: 5,
   cancerTerms: 6,
   chemicalTerms: 7
 }
-// [cancerEquivalenceTerms, chemicalEquivalenceTerms, articlesTotal,ruleAssociationsExtracted]
 
 const store = async (req: Request, res: Response): Promise<Response> => {
   const { name, page } = req.body

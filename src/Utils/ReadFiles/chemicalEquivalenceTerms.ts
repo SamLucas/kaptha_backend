@@ -3,15 +3,21 @@ import knex from '@/database/connection'
 interface DRChemicalEquivalenceTerms {
   idequivalence_relationship: string;
   equivalence_term: string;
-  idterm_descritor: string;
+  idterm_descritor: number;
+}
+
+interface DRTChemicalEquivalenceTerms {
+  idequivalence_relationship: string;
+  equivalence_term: string;
+  id_term: number;
 }
 
 export default async function FRChemicalEquivalenceTerms (data: DRChemicalEquivalenceTerms[]): Promise<void> {
-  const dataFilter: DRChemicalEquivalenceTerms[] = data.map((dataInfo: DRChemicalEquivalenceTerms) =>
+  const dataFilter: DRTChemicalEquivalenceTerms[] = data.map((dataInfo: DRChemicalEquivalenceTerms) =>
     ({
       idequivalence_relationship: dataInfo.idequivalence_relationship,
       equivalence_term: dataInfo.equivalence_term,
-      idterm_descritor: dataInfo.idterm_descritor
+      id_term: dataInfo.idterm_descritor
     }))
 
   await knex

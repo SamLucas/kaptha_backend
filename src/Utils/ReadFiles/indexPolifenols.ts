@@ -1,6 +1,6 @@
 import knex from '@/database/connection'
 
-interface DRIndexPolifenols {
+export interface DRIndexPolifenols {
   poliphenol: string;
   id_term: number;
   total_ocorrence: number;

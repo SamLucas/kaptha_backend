@@ -6,8 +6,11 @@ export async function up (knex: Knex): Promise<any> {
     table.integer('idequivalence_relationship').notNullable()
     table.string('equivalence_term').notNullable()
 
-    table.integer('idterm_descritor').notNullable()
-    table.foreign('idterm_descritor')
+    table.integer('id_term')
+      .unsigned()
+      .notNullable()
+
+    table.foreign('id_term')
       .references('id_term')
       .inTable('indexPolifenols')
 

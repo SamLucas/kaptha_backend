@@ -6,9 +6,9 @@ export async function up (knex: Knex): Promise<any> {
     table.integer('idequivalence_relationship').notNullable()
     table.string('equivalence_term').notNullable()
 
-    table.integer('idterm_descritor').unsigned().notNullable()
+    table.integer('id_term').unsigned().notNullable()
 
-    table.foreign('idterm_descritor')
+    table.foreign('id_term')
       .references('id_term')
       .inTable('indexCancers')
 

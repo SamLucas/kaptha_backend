@@ -1,9 +1,3 @@
-// import 'sucrase/register'
-// import 'dotenv/config'
-
-import 'sucrase/register'
-import 'dotenv/config'
-
 const EvironmentConfig = {
   test: {
     client: 'sqlite3',

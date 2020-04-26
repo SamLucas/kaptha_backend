@@ -1,6 +1,6 @@
 import knex from '@/database/connection'
 
-interface DRIndexCancers {
+export interface DRIndexCancers {
   cancer: string;
   id_term: number;
   total_ocorrence: number;
