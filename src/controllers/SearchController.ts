@@ -11,12 +11,20 @@ const index = async (req: Request, res: Response): Promise<Response> => {
 
   if (dataSearch) {
     PMDCancer = await knex('cancerEquivalenceTerms')
-      .join('indexCancers', 'id_term', '=', 'idterm_descritor')
+      .join(
+        'indexCancers',
+        'indexCancers.id_term',
+        'cancerEquivalenceTerms.id_term'
+      )
       .whereIn('equivalence_term', terms)
       .select('*')
 
     PMDchemicals = await knex('chemicalEquivalenceTerms')
-      .join('indexPolifenols', 'id_term', '=', 'idterm_descritor')
+      .join(
+        'indexPolifenols',
+        'indexPolifenols.id_term',
+        'chemicalEquivalenceTerms.id_term'
+      )
       .whereIn('equivalence_term', terms)
       .select('*')
   }
