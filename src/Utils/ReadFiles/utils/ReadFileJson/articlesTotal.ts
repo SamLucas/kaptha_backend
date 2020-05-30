@@ -8,6 +8,7 @@ export interface DRArticlesTotal {
 
 export default async function FRArticlesTotal (data: DRArticlesTotal[]): Promise<void> {
   const dataFilter: DRArticlesTotal[] = []
+
   data.forEach((dataInfo: DRArticlesTotal) => {
     if (dataInfo.pmid) {
       dataFilter.push({

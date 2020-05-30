@@ -38,7 +38,7 @@ const index = async (req: Request, res: Response): Promise<Response> => {
   const offset = (page - 1) * limit
   const pmidSearch = Pmid.slice(offset, offset + parseInt(limit))
 
-  res.header('X-Total-Count', `${Pmid.length}`)
+  res.header('x-total-count', `${Pmid.length}`)
 
   await knex('articlesTotal')
     .whereIn('pmid', pmidSearch)

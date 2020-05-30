@@ -1,11 +1,19 @@
+# Node
 node_modules
-backup
-build 
 
+# Yarn 
 yarn-error.log
 yarn.lock
 
+# Variaeis de ambiente
 .env
 
+# Sqlite files
 db.sqlite
 db.sqlite-journal
+
+# Folders 
+backup
+build 
+arquivos_faltantes
+arquivos_tsv
