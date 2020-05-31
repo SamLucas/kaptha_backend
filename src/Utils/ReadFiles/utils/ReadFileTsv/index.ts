@@ -33,28 +33,40 @@ const ReadFile = async (req: Request, res: Response): Promise<Response> => {
   const result = []
 
   try {
-    for (let k = parseInt(lines.length / 2) + parseInt(lines.length / 4); k < lines.length - 1; k++) {
+    for (let k = 1; k < lines.length - 1; k++) {
       const obj: any = {}
       const currentline = SplitLine(lines[k])
 
       for (let j = 1; j < headers.length; j++) {
         if (currentline[j]) {
           obj[headers[j]] = currentline[j]
+        } else {
+          console.log(headers[j], j, currentline, k)
         }
       }
 
       result.push(obj)
     }
 
-    await knex
-      .batchInsert(name, result, 1)
-      .then(() => {
-        return res.status(200).json({ message: 'Dados cadastrados com sucesso.' })
-      })
-      .catch((err) => {
-        console.log(err.stack)
-        return res.status(400).json({ message: 'Não foi possivel realizar o cadastro.' })
-      })
+    const response = await fs.writeFile(
+      `${name}.json`,
+      JSON.stringify(result),
+      'utf8',
+      data => data
+    )
+
+    console.log(result.length)
+
+    // await knex
+    //   .batchInsert(name, result, 1)
+    //   .then(() => {
+    return res.status(200).json({ message: 'Dados cadastrados com sucesso.' })
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.stack)
+    //     console.log('>>>', err)
+    //     return res.status(400).json({ message: 'Não foi possivel realizar o cadastro.' })
+    //   })
   } catch (error) {
     console.log(error)
     return res.status(400).json({ message: 'Não foi possivel realizar o cadastro.' })

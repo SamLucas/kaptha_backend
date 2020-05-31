@@ -41,7 +41,7 @@ interface DRRuleAssociationsExtracted {
   pmid: string;
 }
 
-interface DRRuleAssociationsExtractedArray {
+export interface DRRuleAssociationsExtractedArray {
   pmid_article: number;
   sentence_id: string;
   association_type: string;
@@ -134,8 +134,6 @@ export default async function FRRuleAssociationsExtracted (
       })
     }
   })
-
-  console.log(dataFilter.length)
 
   await knex
     .batchInsert('ruleAssociationsExtracted', dataFilter, 1)
