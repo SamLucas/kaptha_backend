@@ -1,5 +1,6 @@
 
 import knex from '@/database/connection'
+import fs from 'fs'
 
 export interface DREntitiesTotal {
   V1: number;

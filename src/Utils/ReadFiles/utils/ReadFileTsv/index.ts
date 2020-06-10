@@ -37,7 +37,7 @@ const ReadFile = async (req: Request, res: Response): Promise<Response> => {
       const obj: any = {}
       const currentline = SplitLine(lines[k])
 
-      for (let j = 1; j < headers.length; j++) {
+      for (let j = 0; j < headers.length; j++) {
         if (currentline[j]) {
           obj[headers[j]] = currentline[j]
         } else {

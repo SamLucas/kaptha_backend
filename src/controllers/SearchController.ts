@@ -5,52 +5,52 @@ import { DRRuleAssociationsExtractedArray } from '@/Utils/ReadFiles/utils/ReadFi
 
 const CPesoPouC1_10 = (rule: DRRuleAssociationsExtractedArray) => {
   let pesoTotal = 0
-  pesoTotal += rule.R2[0].split('sim').length > 0 ? 1 : 0
-  pesoTotal += rule.R3[0].split('sim').length > 0 ? 1 : 0
-  pesoTotal += rule.R4[0].split('sim').length > 0 ? 1 : 0
-  pesoTotal += rule.R5[0].split('sim').length > 0 ? 1 : 0
-  pesoTotal += rule.R6[0].split('sim').length > 0 ? 1 : 0
-  pesoTotal += rule.R8[0].split('sim').length > 0 ? 1 : 0
-  pesoTotal += rule.R9[0].split('sim').length > 0 ? 1 : 0
-  pesoTotal += rule.R10[0].split('sim').length > 0 ? 1 : 0
+  if (rule.R2.indexOf('sim') >= 0) pesoTotal += 1
+  if (rule.R3.indexOf('sim') >= 0) pesoTotal += 1
+  if (rule.R4.indexOf('sim') >= 0) pesoTotal += 1
+  if (rule.R5.indexOf('sim') >= 0) pesoTotal += 1
+  if (rule.R6.indexOf('sim') >= 0) pesoTotal += 1
+  if (rule.R8.indexOf('sim') >= 0) pesoTotal += 1
+  if (rule.R9.indexOf('sim') >= 0) pesoTotal += 1
+  if (rule.R10.indexOf('sim') >= 0) pesoTotal += 1
   return pesoTotal
 }
 
 const CPesoPC1_10 = (rule: DRRuleAssociationsExtractedArray) => {
   let pesoTotal = 0
-  pesoTotal += rule.R1[0].split('sim').length > 0 ? 1 : 0
-  pesoTotal += rule.R2[0].split('sim').length > 0 ? 2 : 0
-  pesoTotal += rule.R3[0].split('sim').length > 0 ? 3 : 0
-  pesoTotal += rule.R4[0].split('sim').length > 0 ? 2 : 0
-  pesoTotal += rule.R5[0].split('sim').length > 0 ? 2 : 0
-  pesoTotal += rule.R6[0].split('sim').length > 0 ? 2 : 0
-  pesoTotal += rule.R7[0].split('sim').length > 0 ? 1 : 0
-  pesoTotal += rule.R8[0].split('sim').length > 0 ? 2 : 0
-  pesoTotal += rule.R9[0].split('sim').length > 0 ? 2 : 0
-  pesoTotal += rule.R10[0].split('sim').length > 0 ? 2 : 0
+  if (rule.R1.indexOf('sim') >= 0) pesoTotal += 1
+  if (rule.R2.indexOf('sim') >= 0) pesoTotal += 2
+  if (rule.R3.indexOf('sim') >= 0) pesoTotal += 3
+  if (rule.R4.indexOf('sim') >= 0) pesoTotal += 2
+  if (rule.R5.indexOf('sim') >= 0) pesoTotal += 2
+  if (rule.R6.indexOf('sim') >= 0) pesoTotal += 2
+  if (rule.R7.indexOf('sim') >= 0) pesoTotal += 1
+  if (rule.R8.indexOf('sim') >= 0) pesoTotal += 2
+  if (rule.R9.indexOf('sim') >= 0) pesoTotal += 2
+  if (rule.R10.indexOf('sim') >= 0) pesoTotal += 2
   return pesoTotal
 }
 
 const CPesoPC14_T1 = (rule: DRRuleAssociationsExtractedArray) => {
   let pesoTotal = 0
-  pesoTotal += rule.R14[0].split('sim').length > 0 ? 3 : 0
-  pesoTotal += rule.R15[0].split('sim').length > 0 ? 2 : 0
-  pesoTotal += rule.is_title[0].split('sim').length > 0 ? 10 : 0
+  if (rule.R14.indexOf('sim') >= 0) pesoTotal += 3
+  if (rule.R15.indexOf('sim') >= 0) pesoTotal += 2
+  if (rule.is_title.indexOf('sim') >= 0) pesoTotal += 10
   return pesoTotal
 }
 
 const CPesoP14_T1 = (rule: DRRuleAssociationsExtractedArray) => {
   let pesoTotal = 0
-  pesoTotal += rule.R14[0].split('sim').length > 0 ? 3 : 0
-  pesoTotal += rule.R15[0].split('sim').length > 0 ? 2 : 0
-  pesoTotal += rule.is_title[0].split('sim').length > 0 ? 7 : 0
+  if (rule.R14.indexOf('sim') >= 0) pesoTotal += 3
+  if (rule.R15.indexOf('sim') >= 0) pesoTotal += 2
+  if (rule.is_title.indexOf('sim') >= 0) pesoTotal += 7
   return pesoTotal
 }
 
 const CPesoPGeG11_12 = (rule: DRRuleAssociationsExtractedArray) => {
   let pesoTotal = 0
-  pesoTotal += rule.R11[0].split('sim').length > 0 ? 2 : 0
-  pesoTotal += rule.R12[0].split('sim').length > 0 ? 1 : 0
+  if (rule.R11.indexOf('sim') >= 0) pesoTotal += 2
+  if (rule.R12.indexOf('sim') >= 0) pesoTotal += 1
   return pesoTotal
 }
 
@@ -84,6 +84,8 @@ const index = async (req: Request, res: Response): Promise<Response> => {
     .whereIn('db_equivalence', terms)
     .select('*')
     .then(async (data) => {
+      const termsSearchPmid = [...new Set(data.map(ele => ele.term_id))]
+
       const dataTermsCancer = [
         ...new Set(
           data.filter(
@@ -110,7 +112,7 @@ const index = async (req: Request, res: Response): Promise<Response> => {
         ? await knex('indexCancers').select('pmids').whereIn('id_term', dataTermsCancer)
         : []
 
-      let termsIds = []
+      let termsIds: any = []
       if (articlesPolifenols) {
         const pmidsSplit = articlesPolifenols.pmids.split(',')
         termsIds = [...new Set([...pmidsSplit, ...termsIds])]
@@ -121,142 +123,152 @@ const index = async (req: Request, res: Response): Promise<Response> => {
         termsIds = [...new Set([...pmidsSplit, ...termsIds])]
       }
 
-      console.log(termsIds)
-      await knex('entitiesTotal')
-        .select('*')
-        .whereIn('entity_pmid', termsIds)
-        .then(async dataEntities => {
-          const Articles = await Promise.all(
-            dataEntities.map(async (entitie) => {
-              const ArticleRule = await knex('articlesTotal')
-                .select('id', 'title_article', 'abstract_article', 'pmid')
-                .where('pmid', entitie.entity_pmid)
-                .then(async ([article]) => {
-                  if (article) {
-                    const responseRules = await knex('ruleAssociationsExtracted')
-                      .where('pmid_article', article.pmid)
-                      .select('*')
+      const response = await Promise.all(termsIds.map(async (ele) => {
+        const entities = await knex('entitiesTotal')
+          .select('*')
+          .where({ entity_pmid: ele })
+          .then(data => data).catch(() => [])
 
-                    const ruleAssociationsExtracted = responseRules.map(rule => {
-                      let entity_sentence_other_cancers = 0
-                      let entity_sentence_cancer = 0
-                      let entity_sentence_polifenol = 0
-                      let entity_sentence_genes = 0
+        const peso_entities_other_cancers = entities.filter(eleEnites =>
+          eleEnites.term_id === '10007' &&
+            eleEnites.entity_pmid == ele &&
+            Redirect[eleEnites.entity_type] === 'indexCancers')
 
-                      entitie.start_pos.forEach((spos, index) => {
-                        const epos = entitie.end_pos[index]
-                        if (spos >= rule.start_pos && epos <= rule.end_pos) {
-                          if (entitie.term_id === '10007') {
-                            entity_sentence_other_cancers++
-                          } else if (Redirect[entitie.entity_type] === 'indexCancers') {
-                            entity_sentence_cancer++
-                          } else if (Redirect[entitie.entity_type] === 'indexPolifenols') {
-                            entity_sentence_polifenol++
-                          } else if (Redirect[entitie.entity_type] === 'indexGene') {
-                            entity_sentence_genes++
-                          }
-                        }
-                      })
+        const peso_entities_cancer = entities.filter(eleEnites =>
+          termsSearchPmid.find(term => eleEnites.term_id === term) > 0 &&
+          eleEnites.entity_pmid == ele &&
+          Redirect[eleEnites.entity_type] === 'indexCancers'
+        )
 
-                      const peso_entities_total = entity_sentence_other_cancers +
-                  entity_sentence_cancer +
-                  entity_sentence_polifenol +
-                  entity_sentence_genes
+        const peso_entities_polifenol = entities.filter(eleEnites =>
+          termsSearchPmid.find(term => eleEnites.term_id === term) > 0 &&
+          eleEnites.entity_pmid == ele &&
+          Redirect[eleEnites.entity_type] === 'indexPolifenols'
+        )
 
-                      // let n_polifenols = 0
-                      // let n_cancers = 0
-                      // let n_other_cancers = 0
-                      // let n_genes = 0
-                      let peso_genes = 0
-                      let peso_frase = 0
+        const peso_entities_geness = entities.filter(eleEnites =>
+          termsSearchPmid.find(term => eleEnites.term_id === term) > 0 &&
+              eleEnites.entity_pmid == ele &&
+              Redirect[eleEnites.entity_type] === 'indexGene')
 
-                      peso_genes = CPesoPGeG11_12(rule)
-                      peso_frase = CPesoPouC1_10(rule) + CPesoP14_T1(rule)
+        const peso_entities_total = peso_entities_other_cancers.length +
+        peso_entities_cancer.length +
+        peso_entities_polifenol.length +
+        peso_entities_geness.length
 
-                      if (entity_sentence_polifenol > 0 && entity_sentence_cancer > 0) {
-                        // n_polifenols = entity_sentence_polifenol
-                        // n_cancers = entity_sentence_cancer
-                        // n_other_cancers = entity_sentence_other_cancers
-                        // n_genes = entity_sentence_genes
-                        peso_frase = CPesoPC1_10(rule) + CPesoPC14_T1(rule)
-                      } else if (
-                        entity_sentence_polifenol > 0 &&
-                    entity_sentence_other_cancers > 0
-                      ) {
-                        // n_polifenols = entity_sentence_polifenol
-                        // n_other_cancers = entity_sentence_other_cancers
-                        // n_genes = entity_sentence_genes
-                      } else if (entity_sentence_polifenol > 0) {
-                        // n_polifenols = entity_sentence_polifenol
-                        // n_genes = entity_sentence_genes
-                      } else if (entity_sentence_cancer > 0) {
-                        // n_cancers = entity_sentence_cancer
-                        peso_genes = 0
-                      } else if (entity_sentence_other_cancers > 0) {
-                        // n_other_cancers = entity_sentence_other_cancers
-                        peso_genes = 0
-                      } else if (entity_sentence_genes > 0) {
-                        // n_genes = entity_sentence_genes
-                      }
+        const rules = await knex('ruleAssociationsExtracted')
+          .where({ pmid_article: ele })
+          .then(data => data)
+          .catch(() => [])
 
-                      return {
-                        ...rule,
-                        peso_artigo: peso_frase,
-                        peso_artigo_genes: peso_genes,
-                        peso_entities_total
-                      }
-                    })
+        const [article] = await knex('articlesTotal')
+          .where({ pmid: ele })
+          .then(data => data)
+          .catch(() => [])
 
-                    const totalPesoArtigo =
-                  ruleAssociationsExtracted
-                    .reduce((total, ele) => total + ele.peso_artigo, 0)
+        let peso_artigo_genes = 0
+        let peso_artigo = 0
 
-                    const totalPesoGenes =
-                  ruleAssociationsExtracted
-                    .reduce((total, ele) => total + ele.peso_artigo_genes, 0)
+        const newRules = rules.map(rule => {
+          let peso_frase = 0
+          let peso_genes = 0
 
-                    const totalEntities =
-                  ruleAssociationsExtracted
-                    .reduce((total, ele) => total + ele.peso_entities_total, 0)
+          const entitiesRules = []
 
-                    const pTotal = pArtigo + pGene + pEntities
-                    const peso_final =
-                  (totalPesoArtigo * pArtigo) +
-                  (totalPesoGenes * pGene) +
-                  (totalEntities * pEntities) / pTotal
+          entities.map(entitiesItem => {
+            entitiesItem.start_pos.map((spos, index) => {
+              const epos = entitiesItem.end_pos[index]
+              if (spos >= rule.start_pos && epos <= rule.end_pos) {
+                entitiesRules.push({ start: spos, end: epos, entity_type: entitiesItem.entity_type })
 
-                    const filterRule = ruleAssociationsExtracted.map(ele => {
-                      const {
-                        association_type, start_pos, end_pos, sentence, peso_artigo, peso_artigo_genes
-                      } = ele
-                      return { association_type, start_pos, end_pos, sentence, peso_artigo, peso_artigo_genes }
-                    })
+                const entity_sentence_other_cancers = entities.filter(eleEnites =>
+                  eleEnites.term_id === '10007' &&
+                  eleEnites.entity_pmid == rule.pmid_article &&
+                  Redirect[eleEnites.entity_type] === 'indexCancers')
 
-                    return {
-                      ...article,
-                      peso_final,
-                      peso_rules_normalized: totalPesoArtigo,
-                      peso_genes_normalized: totalPesoGenes,
-                      peso_entities_normalized: totalEntities,
-                      ruleAssociationsExtracted: filterRule
-                    }
-                  }
-                })
+                const entity_sentence_cancer = entities.filter(eleEnites =>
+                  termsSearchPmid.find(term => eleEnites.term_id === term) > 0 &&
+                eleEnites.entity_pmid == rule.pmid_article &&
+                Redirect[eleEnites.entity_type] === 'indexCancers'
+                )
 
-              return ArticleRule
-            }))
+                const entity_sentence_polifenol = entities.filter(eleEnites =>
+                  termsSearchPmid.find(term => eleEnites.term_id === term) > 0 &&
+                eleEnites.entity_pmid == rule.pmid_article &&
+                Redirect[eleEnites.entity_type] === 'indexPolifenols'
+                )
 
-          Articles.sort((ele1, ele2) => {
-            if (ele1.peso_final > ele2.peso_final) return -1
-            if (ele2.peso_final > ele1.peso_final) return 1
-            return 0
+                const entity_sentence_genes = entities.filter(eleEnites =>
+                  eleEnites.entity_pmid == rule.pmid_article &&
+                    Redirect[eleEnites.entity_type] === 'indexGene')
+
+                if (entity_sentence_polifenol.length > 0 && entity_sentence_cancer.length > 0) {
+                  peso_genes = CPesoPGeG11_12(rule)
+                  peso_frase = CPesoPC1_10(rule) + CPesoPC14_T1(rule)
+                } else if (
+                  entity_sentence_polifenol.length > 0 && entity_sentence_other_cancers.length > 0
+                ) {
+                  peso_genes = CPesoPGeG11_12(rule)
+                  peso_frase = CPesoPouC1_10(rule) + CPesoP14_T1(rule)
+                } else if (entity_sentence_polifenol.length > 0) {
+                // n_polifenols = entity_sentence_polifenol
+                // n_genes = entity_sentence_genes
+                  peso_genes = CPesoPGeG11_12(rule)
+                  peso_frase = CPesoPouC1_10(rule) + CPesoP14_T1(rule)
+                } else if (entity_sentence_cancer.length > 0) {
+                // n_cancers = entity_sentence_cancer
+                  peso_genes = 0
+                  peso_frase = CPesoPouC1_10(rule) + CPesoP14_T1(rule)
+                } else if (entity_sentence_other_cancers.length > 0) {
+                // n_other_cancers = entity_sentence_other_cancers
+                  peso_genes = 0
+                  peso_frase = CPesoPouC1_10(rule) + CPesoP14_T1(rule)
+                } else if (entity_sentence_genes.length > 0) {
+                // n_genes = entity_sentence_genes
+                  peso_genes = CPesoPGeG11_12(rule)
+                  peso_frase = CPesoPouC1_10(rule) + CPesoP14_T1(rule)
+                }
+                peso_artigo_genes += peso_genes
+                peso_artigo += peso_frase
+              }
+            })
           })
 
-          return res.status(200).json(Articles)
+          return {
+            ...rule,
+            entitiesRules,
+            peso_frase,
+            peso_genes
+
+          }
         })
+
+        const pTotal = pArtigo + pGene + pEntities
+        const peso_final =
+            (peso_artigo * pArtigo) +
+            (peso_artigo_genes * pGene) +
+            (peso_entities_total * pEntities) / pTotal
+
+        return {
+          article,
+          pmid: ele,
+          peso_rules: peso_artigo,
+          peso_entities: peso_entities_total,
+          peso_genes: peso_artigo_genes,
+          peso_final,
+          rule: newRules
+        }
+      }))
+
+      response.sort((ele1, ele2) => {
+        if (ele1.peso_final > ele2.peso_final) return -1
+        if (ele2.peso_final > ele1.peso_final) return 1
+        return 0
+      })
+
+      return res.status(200).json(response)
     })
     .catch((err) => {
-      console.log(err)
       return res.status(400).json({ err, message: 'Algo de errado não esta certo.' })
     })
 }
