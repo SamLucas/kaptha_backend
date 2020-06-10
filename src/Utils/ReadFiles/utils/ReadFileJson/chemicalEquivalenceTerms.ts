@@ -37,10 +37,10 @@ export default async function FRChemicalEquivalenceTerms (data: DRChemicalEquiva
     }
   })
 
-  fs.writeFileSync('./chemicalEquivalenceTerms.json', JSON.stringify(dataInvalid))
+  // fs.writeFileSync('./chemicalEquivalenceTerms.json', JSON.stringify(dataInvalid))
 
-  // await knex
-  //   .batchInsert('chemicalEquivalenceTerms', dataFilter, 1)
-  //   .then((data) => data)
-  //   .catch((err) => console.log(err.stack))
+  await knex
+    .batchInsert('chemicalEquivalenceTerms', dataFilter, 1)
+    .then((data) => data)
+    .catch((err) => console.log(err.stack))
 }
