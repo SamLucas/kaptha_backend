@@ -25,8 +25,8 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "nodemon": "^2.0.2",
     "sucrase": "^3.13.0",
+    "ts-node-dev": "^1.0.0-pre.56",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.8.3"
   },
@@ -43,7 +43,7 @@
     "sqlite3": "^4.1.1"
   },
   "scripts": {
-    "dev": "nodemon src/server.ts",
+    "dev": "tsnd --transpile-only --respawn --ignore-watch node_modules -r tsconfig-paths/register src/server.ts",
     "build": "babel src --out-dir build --extensions \".ts,.tsx\" --source-maps inline",
     "start": "node ./build/server.js"
   },

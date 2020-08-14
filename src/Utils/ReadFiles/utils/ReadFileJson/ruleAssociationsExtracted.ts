@@ -1,8 +1,8 @@
-import knex from '@/database/connection'
-import fs from 'fs'
-import path from 'path'
+import knex from "@/database/connection";
+import fs from "fs";
+import path from "path";
 
-import { DRArticlesTotal } from './articlesTotal'
+import { DRArticlesTotal } from "./articlesTotal";
 
 interface DRRuleAssociationsExtracted {
   sentence_id: string;
@@ -82,20 +82,19 @@ interface DIds {
   pmid: number;
 }
 
-export default async function FRRuleAssociationsExtracted (
+export default async function FRRuleAssociationsExtracted(
   data: DRRuleAssociationsExtracted[]
 ): Promise<void> {
-  const ids: DIds[] = JSON.parse(
-    fs.readFileSync(
-      './src/Utils/ReadFiles/utils/id_articleTotals.json',
-      'utf8'
-    )
-  )
+  const ids: DIds[] = await knex("articlesTotal").select("pmid");
 
-  const dataFilter: DRRuleAssociationsExtractedArray[] = []
+  // const ids: DIds[] = JSON.parse(
+  //   fs.readFileSync("./src/Utils/ReadFiles/utils/id_articleTotals.json", "utf8")
+  // );
+
+  const dataFilter: DRRuleAssociationsExtractedArray[] = [];
 
   data.forEach((dataInfo: DRRuleAssociationsExtracted) => {
-    if (ids.find((ele: DIds) => ele.pmid === dataInfo.pmid)) {
+    if (ids.find((ele: DIds) => ele.pmid === Number(dataInfo.pmid))) {
       dataFilter.push({
         sentence_id: dataInfo.sentence_id,
         association_type: dataInfo.association_type,
@@ -130,13 +129,13 @@ export default async function FRRuleAssociationsExtracted (
         end_pos: dataInfo.end_pos,
         sentence: dataInfo.sentence,
         original_sentence: dataInfo.original_sentence,
-        pmid_article: parseInt(dataInfo.pmid)
-      })
+        pmid_article: parseInt(dataInfo.pmid),
+      });
     }
-  })
+  });
 
   await knex
-    .batchInsert('ruleAssociationsExtracted', dataFilter, 1)
+    .batchInsert("ruleAssociationsExtracted", dataFilter, 1)
     .then((data) => data)
-    .catch((err) => console.log(err.stack))
+    .catch((err) => console.log(err.stack));
 }
