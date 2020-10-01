@@ -91,7 +91,7 @@ const index = async (req: Request, res: Response): Promise<Response> => {
     indexCancers: [
       "cancer_type_entity_cell",
       "cancer_type_entity_e",
-      "cancer_type_entity_cell",
+      "cancer_type_entity_p",
     ],
   };
 
