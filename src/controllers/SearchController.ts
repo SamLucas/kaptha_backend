@@ -189,12 +189,10 @@ const index = async (req: Request, res: Response): Promise<Response> => {
           );
 
           const peso_entities_total =
-            peso_entities_other_cancers.length > 0 &&
-            peso_entities_other_cancers.length >
-              0 +
-                peso_entities_cancer.length +
-                peso_entities_polifenol.length +
-                peso_entities_geness.length;
+            peso_entities_other_cancers.length +
+            peso_entities_cancer.length +
+            peso_entities_polifenol.length +
+            peso_entities_geness.length;
 
           const rules = await knex("ruleAssociationsExtracted")
             .where({ pmid_article: ele })
