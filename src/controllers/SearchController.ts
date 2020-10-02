@@ -146,9 +146,11 @@ const index = async (req: Request, res: Response): Promise<Response> => {
         const pmidsSplit = articlesCancer.pmids.split(",");
         termsIdsTwo = [...new Set([...pmidsSplit, ...termsIds])];
       }
-      
-      termsIds = termsIdsOne.length > 0 && termsIdsTwo.length > 0  ? _.intersection(termsIdsOne, termsIdsTwo) : [...termsIdsTwo,...termsIdsOne];
-      
+
+      termsIds =
+        termsIdsOne.length > 0 && termsIdsTwo.length > 0
+          ? _.intersection(termsIdsOne, termsIdsTwo)
+          : [...termsIdsTwo, ...termsIdsOne];
 
       const response = await Promise.all(
         termsIds.map(async (ele) => {
@@ -187,10 +189,12 @@ const index = async (req: Request, res: Response): Promise<Response> => {
           );
 
           const peso_entities_total =
-            peso_entities_other_cancers. > 0 &&             peso_entities_other_cancers. > 0 +
-            peso_entities_cancer.length +
-            peso_entities_polifenol.length +
-            peso_entities_geness.length;
+            peso_entities_other_cancers.length > 0 &&
+            peso_entities_other_cancers.length >
+              0 +
+                peso_entities_cancer.length +
+                peso_entities_polifenol.length +
+                peso_entities_geness.length;
 
           const rules = await knex("ruleAssociationsExtracted")
             .where({ pmid_article: ele })
