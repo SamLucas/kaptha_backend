@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import knex from "@/database/connection";
 
+import _ from "lodash";
+
 import { DRRuleAssociationsExtractedArray } from "@/Utils/ReadFiles/utils/ReadFileJson/ruleAssociationsExtracted";
 
 const CPesoPouC1_10 = (rule: DRRuleAssociationsExtractedArray) => {
@@ -131,16 +133,21 @@ const index = async (req: Request, res: Response): Promise<Response> => {
               .whereIn("id_term", dataTermsCancer)
           : [];
 
+      let termsIdsOne: any = [];
+      let termsIdsTwo: any = [];
       let termsIds: any = [];
+
       if (articlesPolifenols) {
         const pmidsSplit = articlesPolifenols.pmids.split(",");
-        termsIds = [...new Set([...pmidsSplit, ...termsIds])];
+        termsIdsOne = [...new Set([...pmidsSplit, ...termsIds])];
       }
 
       if (articlesCancer) {
         const pmidsSplit = articlesCancer.pmids.split(",");
-        termsIds = [...new Set([...pmidsSplit, ...termsIds])];
+        termsIdsTwo = [...new Set([...pmidsSplit, ...termsIds])];
       }
+      termsIds = _.intersection(termsIdsOne, termsIdsTwo);
+      console.log(termsIds.length);
 
       const response = await Promise.all(
         termsIds.map(async (ele) => {
@@ -311,6 +318,8 @@ const index = async (req: Request, res: Response): Promise<Response> => {
         if (ele2.peso_final > ele1.peso_final) return 1;
         return 0;
       });
+
+      console.log(response.length);
 
       return res.status(200).json(response);
     })
