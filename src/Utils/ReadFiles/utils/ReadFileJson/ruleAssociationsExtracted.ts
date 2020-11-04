@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 
 import { DRArticlesTotal } from "./articlesTotal";
+import { handlePagination } from "@/Utils";
 
 interface DRRuleAssociationsExtracted {
   sentence_id: string;
@@ -22,6 +23,7 @@ interface DRRuleAssociationsExtracted {
   R13: string;
   R14: string;
   R15: string;
+  R16: string;
   HM12: string;
   HM3: string;
   HM4: string;
@@ -60,6 +62,7 @@ export interface DRRuleAssociationsExtractedArray {
   R13: string;
   R14: string;
   R15: string;
+  R16: string;
   HM12: string;
   HM3: string;
   HM4: string;
@@ -81,6 +84,11 @@ export interface DRRuleAssociationsExtractedArray {
 interface DIds {
   pmid: number;
 }
+
+function paginate(array: DRRuleAssociationsExtractedArray[], page_size: number, page_number: number) {
+  return array.slice((page_number - 1) * page_size, page_number * page_size);
+}
+
 
 export default async function FRRuleAssociationsExtracted(
   data: DRRuleAssociationsExtracted[]
@@ -113,6 +121,7 @@ export default async function FRRuleAssociationsExtracted(
         R13: dataInfo.R13,
         R14: dataInfo.R14,
         R15: dataInfo.R15,
+        R16: dataInfo.R16,
         HM12: dataInfo.HM12,
         HM3: dataInfo.HM3,
         HM4: dataInfo.HM4,
@@ -134,8 +143,5 @@ export default async function FRRuleAssociationsExtracted(
     }
   });
 
-  await knex
-    .batchInsert("ruleAssociationsExtracted", dataFilter, 1)
-    .then((data) => data)
-    .catch((err) => console.log(err.stack));
+  await handlePagination(dataFilter, 20000, "ruleAssociationsExtracted")
 }

@@ -54,4 +54,4 @@ const EvironmentConfig = {
   }
 }
 
-module.exports = EvironmentConfig[process.env.ENVIRONMENT]
+module.exports = EvironmentConfig["development"]

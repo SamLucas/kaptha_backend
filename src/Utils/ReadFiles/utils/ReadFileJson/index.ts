@@ -24,15 +24,15 @@ const FuctionsArray = [
 ];
 
 const IndexFunctions = {
-  indexCancers: 0,
-  indexPolifenols: 3,
-  cancerEquivalenceTerms: 1,
-  chemicalEquivalenceTerms: 2,
-  articlesTotal: 4,
-  ruleAssociationsExtracted: 5,
-  cancerTerms: 6,
-  chemicalTerms: 7,
-  entitiesTotal: 8,
+  cancerTerms: 6, // 491 registros
+  indexCancers: 0, // 239 registros
+  chemicalTerms: 7, // 7.894 registros
+  articlesTotal: 4, // 42.548 registros
+  indexPolifenols: 3, // 2.006 registros
+  entitiesTotal: 8, // 528.500 registros
+  cancerEquivalenceTerms: 1, // 6.854 registros
+  chemicalEquivalenceTerms: 2, // 6.594 registros
+  ruleAssociationsExtracted: 5, // 104.016 registros
 };
 
 const store = async (req: Request, res: Response): Promise<Response> => {

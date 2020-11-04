@@ -47,7 +47,6 @@ const ReadFile = async (req: Request, res: Response): Promise<Response> => {
           // console.log(headers[j], j, currentline, k);
         }
       }
-
       result.push(obj);
     }
 

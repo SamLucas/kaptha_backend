@@ -1,5 +1,4 @@
 import knex from "@/database/connection";
-import fs from "fs";
 
 export interface DREntitiesTotal {
   V1: number;
@@ -14,43 +13,51 @@ export interface DREntitiesTotal {
   entity_pmid: number;
 }
 
+function paginate(array: DREntitiesTotal[], page_size: number, page_number: number) {
+  return array.slice((page_number - 1) * page_size, page_number * page_size);
+}
+
 export default async function FREntitiesTotal(
   data: DREntitiesTotal[]
 ): Promise<void> {
-  const dataFilterPmidRepeat: string[] = [];
-  const dataFilter: DREntitiesTotal[] = [];
+  const response = data.map((dataInfo: DREntitiesTotal) => ({
+    V1: dataInfo.V1,
+    pubtatot_term: dataInfo.pubtatot_term,
+    db_term: dataInfo.db_term,
+    db_equivalence: dataInfo.db_equivalence,
+    term_id: dataInfo.term_id,
+    mesh_id: dataInfo.mesh_id,
+    start_pos: dataInfo.start_pos,
+    end_pos: dataInfo.end_pos,
+    entity_type: dataInfo.entity_type,
+    entity_pmid: dataInfo.entity_pmid,
+  }));
 
-  data.forEach((dataInfo: DREntitiesTotal) => {
-    const start = [];
-    const end = [];
+  let currentPage = 0;
+  const limitPag = 10000
 
-    if (!dataFilterPmidRepeat.find((ele) => ele === dataInfo.entity_pmid)) {
-      data.forEach((element) => {
-        if (element.entity_pmid === dataInfo.entity_pmid) {
-          start.push(element.start_pos);
-          end.push(element.end_pos);
-        }
-      });
+  console.log(response.length)
 
-      dataFilterPmidRepeat.push(dataInfo.entity_pmid);
+  while ((currentPage + 1) * limitPag < response.length) {
 
-      dataFilter.push({
-        V1: dataInfo.V1,
-        pubtatot_term: dataInfo.pubtatot_term,
-        db_term: dataInfo.db_term,
-        db_equivalence: dataInfo.db_equivalence,
-        term_id: dataInfo.term_id,
-        mesh_id: dataInfo.mesh_id,
-        start_pos: start,
-        end_pos: end,
-        entity_type: dataInfo.entity_type,
-        entity_pmid: dataInfo.entity_pmid,
-      });
-    }
-  });
+    currentPage = currentPage + 1
+    const dataPerPag = paginate(response, limitPag, currentPage)
 
-  await knex
-    .batchInsert("entitiesTotal", dataFilter, 1)
-    .then((data) => data)
-    .catch(console.error);
+    await knex
+      .batchInsert("entitiesTotal", dataPerPag, 1)
+      .then((data) => data)
+      .catch(console.error);
+
+    console.log(currentPage, dataPerPag.length)
+  }
+
+  const rest = response.slice(currentPage * limitPag)
+  if (rest.length > 0) {
+    await knex
+      .batchInsert("entitiesTotal", rest, 1)
+      .then((data) => data)
+      .catch(console.error);
+
+    console.log(currentPage, rest.length)
+  }
 }
