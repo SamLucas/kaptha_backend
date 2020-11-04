@@ -1,6 +1,6 @@
 import * as Knex from 'knex'
 
-export async function up (knex: Knex): Promise<any> {
+export async function up(knex: Knex): Promise<any> {
   return knex.schema.createTable('ruleAssociationsExtracted', table => {
     table.increments('id').primary()
     table.string('sentence_id').notNullable()
@@ -38,14 +38,14 @@ export async function up (knex: Knex): Promise<any> {
     table.text('original_sentence').notNullable()
 
     table.integer('pmid_article', 11).notNullable()
-    table.foreign('pmid_article')
-      .references('pmid')
-      .inTable('articlesTotal')
+    // table.foreign('pmid_article')
+    //   .references('pmid')
+    //   .inTable('articlesTotal')
 
     table.timestamps(true, true)
   })
 }
 
-export async function down (knex: Knex): Promise<any> {
+export async function down(knex: Knex): Promise<any> {
   return knex.schema.dropTable('ruleAssociationsExtracted')
 }
