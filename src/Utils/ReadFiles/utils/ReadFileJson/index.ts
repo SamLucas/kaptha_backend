@@ -10,6 +10,8 @@ import FRRuleAssociationsExtracted from "@/Utils/ReadFiles/utils/ReadFileJson/ru
 import FRCancerTerms from "@/Utils/ReadFiles/utils/ReadFileJson/cancerTerms";
 import FRChemicalTerms from "@/Utils/ReadFiles/utils/ReadFileJson/chemicalTerms";
 import FREntitiesTotal from "@/Utils/ReadFiles/utils/ReadFileJson/entitiesTotal";
+import FRGenesTotal from "@/Utils/ReadFiles/utils/ReadFileJson/genesTotal";
+import FRIndexGene from "@/Utils/ReadFiles/utils/ReadFileJson/indexGene";
 
 const FuctionsArray = [
   FRIndexCancers,
@@ -21,6 +23,8 @@ const FuctionsArray = [
   FRCancerTerms,
   FRChemicalTerms,
   FREntitiesTotal,
+  FRGenesTotal,
+  FRIndexGene
 ];
 
 const IndexFunctions = {
@@ -33,6 +37,8 @@ const IndexFunctions = {
   cancerEquivalenceTerms: 1, // 6.854 registros
   chemicalEquivalenceTerms: 2, // 6.594 registros
   ruleAssociationsExtracted: 5, // 104.016 registros
+  genesTotal: 9, // 3.121 registros
+  indexGene: 10 // 9.160 registros
 };
 
 const store = async (req: Request, res: Response): Promise<Response> => {
