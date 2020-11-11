@@ -1,0 +1,37 @@
+export default interface Rule {
+  pmid_article: number;
+  sentence_id: string;
+  association_type: string;
+  R1: string;
+  R2: string;
+  R3: string;
+  R4: string;
+  R5: string;
+  R6: string;
+  R7: string;
+  R8: string;
+  R9: string;
+  R10: string;
+  R11: string;
+  R12: string;
+  R13: string;
+  R14: string;
+  R15: string;
+  R16: string;
+  HM12: string;
+  HM3: string;
+  HM4: string;
+  HM5: string;
+  HM6: string;
+  HM7: string;
+  HM8: string;
+  HM9: string;
+  HM10: string;
+  is_title: string;
+  has_entity: string;
+  is_association: string;
+  start_pos: string;
+  end_pos: string;
+  sentence: string;
+  original_sentence: string;
+}
