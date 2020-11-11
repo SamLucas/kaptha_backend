@@ -13,7 +13,7 @@ function getDetailsTerm() {
 
   async function main(req: Request, res: Response) {
 
-    const { entity_type, term_id, mesh_id } = req.body
+    const { entity_type, term_id, mesh_id } = req.query;
 
     console.log(entity_type, term_id, mesh_id)
 
@@ -25,10 +25,10 @@ function getDetailsTerm() {
     let data
 
     if (typeFuction === "indexCancers")
-      data = await _getDetailsTermCancer(term_id)
+      data = await _getDetailsTermCancer(term_id as String)
 
     else if (typeFuction === "indexPolifenols")
-      data = await _getDetailsTermPolifenol(mesh_id)
+      data = await _getDetailsTermPolifenol(mesh_id as String)
 
     return res.status(200).send(data ? data[0] : null)
   }
