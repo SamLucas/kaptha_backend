@@ -69,7 +69,7 @@ const index = async (req: Request, res: Response) => {
           dataTermsGeneHGNC.length > 0
             ? await knex("genesTotal")
               .select("pmids")
-              .whereIn("gene_hgnc_entity", dataTermsGeneHGNC)
+              .whereIn("id_term_hgnc", dataTermsGeneHGNC)
             : [];
 
         const termsIds = PMIDs._makeInterception(
