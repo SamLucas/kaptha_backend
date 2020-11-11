@@ -12,20 +12,23 @@ const indexCancers = [
 const searchTermCancer = async (req: Request, res: Response): Promise<Response> => {
   const { name = "", type = "cancer" } = req.query;
 
+  const TypeConsult = type as String
+  const NameEntitie = name as String
+
   let entity: String[] = []
 
-  if (type.toLowerCase() === "cancer") entity = indexCancers
-  else if (type.toLowerCase() === "gene") entity = indexGene
-  else if (type.toLowerCase() === "polifenol") entity = indexPolifenols
+  if (TypeConsult.toLowerCase() === "cancer") entity = indexCancers
+  else if (TypeConsult.toLowerCase() === "gene") entity = indexGene
+  else if (TypeConsult.toLowerCase() === "polifenol") entity = indexPolifenols
 
   return await knex("entitiesTotal")
     .distinct()
     .where(function () {
       this.whereRaw(`LOWER(db_equivalence) LIKE ?`, [
-        `%${name.toLowerCase()}%`,
+        `%${NameEntitie.toLowerCase()}%`,
       ]);
       this.whereRaw(`LOWER(db_term) LIKE ?`, [
-        `%${name.toLowerCase()}%`,
+        `%${NameEntitie.toLowerCase()}%`,
       ]);
       this.whereIn("entity_type", entity);
     })

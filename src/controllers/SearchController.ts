@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import knex from "@/database/connection";
 
-import _ from "lodash";
-
-import { DRRuleAssociationsExtractedArray } from "@/Utils/ReadFiles/utils/ReadFileJson/ruleAssociationsExtracted";
 import { normalization } from "@/Utils";
 
 import RankingOfEntities from '@/factorys/Ranking'
@@ -11,11 +8,6 @@ import PMIDs from '@/factorys/PMIDs'
 
 import RulesInterface from '@/interfaces/Rules'
 import ResultInterface from '@/interfaces/Result'
-
-import {
-  ClassificartionGene,
-  Redirect
-} from '@/Utils/EntitiesRedirect'
 
 const index = async (req: Request, res: Response) => {
 
