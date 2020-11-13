@@ -1,13 +1,6 @@
 import knex from "@/database/connection";
 
 
-export const normalization = (x: number, Xmin: number, Xmax: number): number => {
-  const partUp = x - Xmin
-  const partDown = Xmax - Xmin
-  return parseFloat(partUp / partDown).toPrecision(2)
-  // return x
-}
-
 function paginate(array: any[], page_size: number, page_number: number) {
   return array.slice((page_number - 1) * page_size, page_number * page_size);
 }

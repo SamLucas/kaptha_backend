@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import knex from "@/database/connection";
 
-import { normalization } from "@/Utils";
-
+import Normalization from '@/factorys/Normalization'
 import RankingOfEntities from '@/factorys/Ranking'
 import PMIDs from '@/factorys/PMIDs'
 
@@ -25,6 +24,12 @@ const index = async (req: Request, res: Response) => {
   dataSearchPolyphenol !== "" && terms.push(dataSearchPolyphenol as String);
   dataSearchChemical !== "" && terms.push(dataSearchChemical as String);
   dataSearchGene !== "" && terms.push(dataSearchGene as String);
+
+  const typeConsult = PMIDs.typeConsult(
+    dataSearchPolyphenol as String,
+    dataSearchChemical as String,
+    dataSearchGene as String
+  )
 
   console.log(terms);
 
@@ -81,7 +86,11 @@ const index = async (req: Request, res: Response) => {
 
         console.log(termsIds.length, "artigos encontrados.")
 
-        const response: ResultInterface[] = []
+        const dataResult: ResultInterface[] = []
+
+        let XP1 = { min: 10000, max: -1 }
+        let XP2 = { min: 10000, max: -1 }
+        let XP3 = { min: 10000, max: -1 }
 
         await Promise.all(
           termsIds.map(async (ele: String) => {
@@ -121,7 +130,8 @@ const index = async (req: Request, res: Response) => {
               const responseRankedEntities = RankingOfEntities.filterSearchEntities(
                 entities,
                 rule,
-                termsSearchPmid
+                termsSearchPmid,
+                typeConsult
               )
 
               const {
@@ -132,13 +142,14 @@ const index = async (req: Request, res: Response) => {
                 entity_sentence_polifenol
               } = responseRankedEntities
 
-              const { peso_frase, peso_genes } = RankingOfEntities.weightCalculationInSentences(
-                entity_sentence_cancer,
-                entity_sentence_genes,
-                entity_sentence_other_cancers,
-                entity_sentence_polifenol,
-                rule
-              )
+              const { peso_frase, peso_genes } =
+                RankingOfEntities.weightCalculationInSentences(
+                  entity_sentence_cancer,
+                  entity_sentence_genes,
+                  entity_sentence_other_cancers,
+                  entity_sentence_polifenol,
+                  rule
+                )
 
               peso_artigo_genes += peso_genes;
               peso_artigo += peso_frase;
@@ -151,38 +162,54 @@ const index = async (req: Request, res: Response) => {
               };
             });
 
-            const Xmax = Math.max(...[peso_artigo, peso_entities_total, peso_artigo_genes]);
-            const Xmin = 0
+            XP1 = Normalization._changeValueMinMax(XP1, peso_artigo)
+            XP2 = Normalization._changeValueMinMax(XP2, peso_entities_total)
+            XP3 = Normalization._changeValueMinMax(XP3, peso_artigo_genes)
 
-            const peso_rules_normalized = normalization(peso_artigo, Xmin, Xmax)
-            const peso_entities_normalized = normalization(peso_entities_total, Xmin, Xmax)
-            const peso_genes_normalized = normalization(peso_artigo_genes, Xmin, Xmax)
-
-            const pTotal = pArtigo + pGene + pEntities;
-            const sumTotal =
-              peso_rules_normalized * pArtigo +
-              peso_entities_normalized * pGene +
-              peso_genes_normalized * pEntities;
-
-            const peso_final = sumTotal / pTotal
-
-            response.push({
+            dataResult.push({
               pmid: ele,
-              peso_rules: peso_rules_normalized,
-              peso_entities: peso_entities_normalized,
-              peso_genes: peso_genes_normalized,
-              peso_final,
-              article,
+              peso_rules: peso_artigo,
+              peso_entities: peso_entities_total,
+              peso_genes: peso_artigo_genes,
+              peso_final: 0,
+              article: {
+                ...article,
+                med: Normalization._changedToPrecision(article.med as number, 3)
+              },
               rule: newRules,
             });
           })
         );
 
-        response.sort((ele1, ele2) => {
-          if (ele1.peso_final > ele2.peso_final) return -1;
-          if (ele2.peso_final > ele1.peso_final) return 1;
-          return 0;
-        });
+
+        const response = dataResult.map(ele => {
+
+          const { peso_rules, peso_entities, peso_genes } = ele
+
+          const newPR = Normalization._calcNormalization(peso_rules as number, XP1)
+          const newPE = Normalization._calcNormalization(peso_entities as number, XP2)
+          const newPG = Normalization._calcNormalization(peso_genes as number, XP3)
+
+          const pTotal = pArtigo + pGene + pEntities;
+          const sumTotal =
+            newPR * pArtigo +
+            newPE * pGene +
+            newPG * pEntities;
+
+          const peso_final = sumTotal / pTotal
+          return {
+            ...ele,
+            peso_rules: Normalization._changedToPrecision(newPR, 2),
+            peso_entities: Normalization._changedToPrecision(newPE, 2),
+            peso_genes: Normalization._changedToPrecision(newPG, 2),
+            peso_final: Normalization._changedToPrecision(peso_final, 3)
+          }
+        })
+          .sort((ele1, ele2) => {
+            if (ele1.peso_final > ele2.peso_final) return -1;
+            if (ele2.peso_final > ele1.peso_final) return 1;
+            return 0;
+          })
 
         // console.log(response.length);
         return res.status(200).json(response);

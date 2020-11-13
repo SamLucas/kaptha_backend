@@ -79,9 +79,23 @@ function PMIDs() {
     else return [...termsIdsOne, ...termsIdsTwo, ...termsIdsThere]
   }
 
+  function typeConsult(
+    dataSearchPolyphenol: String,
+    dataSearchChemical: String,
+    dataSearchGene: String
+  ) {
+
+    if (dataSearchPolyphenol && dataSearchChemical) return "PC"
+    else if (dataSearchPolyphenol && dataSearchGene) return "PG"
+    else if (dataSearchPolyphenol) return "P"
+    else if (dataSearchChemical) return "C"
+    else return "G"
+  }
+
   return {
     _getPMIDs,
-    _makeInterception
+    _makeInterception,
+    typeConsult
   }
 }
 

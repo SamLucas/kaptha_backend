@@ -20,8 +20,6 @@ function getDetailsTerm() {
     const indexRedirect: keyof typeof Redirect = entity_type as ClassificartionGene
     const typeFuction = Redirect[indexRedirect]
 
-    console.log(typeFuction)
-
     let data
 
     if (typeFuction === "indexCancers")

@@ -15,7 +15,8 @@ function Rakend() {
   function filterSearchEntities(
     entities: EntitiesInterface[],
     rule: RuleInterface,
-    termsSearchPmid: String[] = []
+    termsSearchPmid: String[] = [],
+    typeConsult: String
   ) {
 
     const startRule = parseInt(rule.start_pos)
@@ -23,7 +24,9 @@ function Rakend() {
 
     const entity_sentence_other_cancers = entities.filter(
       (eleEnites) => {
-        const nameEntitie: keyof typeof Redirect = eleEnites.entity_type as ClassificartionGene
+        let nameEntitie: keyof typeof Redirect;
+        nameEntitie = eleEnites.entity_type as ClassificartionGene
+
         return eleEnites.term_id === "10007" &&
           eleEnites.entity_pmid == rule.pmid_article &&
           eleEnites.start_pos >= startRule && eleEnites.end_pos <= endRule &&
@@ -33,8 +36,16 @@ function Rakend() {
 
     const entity_sentence_cancer = entities.filter(
       (eleEnites) => {
-        const nameEntitie: keyof typeof Redirect = eleEnites.entity_type as ClassificartionGene
-        return eleEnites.entity_pmid == rule.pmid_article &&
+        let nameEntitie: keyof typeof Redirect;
+        nameEntitie = eleEnites.entity_type as ClassificartionGene
+
+        let termsSearch = true;
+        if (typeConsult === "C" || typeConsult == "PC") {
+          const responseFind = termsSearchPmid.find((term) => eleEnites.term_id === term)
+          if (!responseFind) termsSearch = false
+        }
+
+        return termsSearch && eleEnites.entity_pmid == rule.pmid_article &&
           eleEnites.start_pos >= startRule && eleEnites.end_pos <= endRule &&
           Redirect[nameEntitie] === "indexCancers"
       }
@@ -43,10 +54,16 @@ function Rakend() {
     const entity_sentence_polifenol = entities.filter(
       (eleEnites) => {
 
-        const nameEntitie: keyof typeof Redirect = eleEnites.entity_type as ClassificartionGene
-        const response = termsSearchPmid.find((term) => eleEnites.term_id === term)
+        let nameEntitie: keyof typeof Redirect;
+        nameEntitie = eleEnites.entity_type as ClassificartionGene
 
-        return response && parseInt(response as string) > 0 &&
+        let termsSearch = true;
+        if (typeConsult === "P" || typeConsult == "PC" || typeConsult == "PG") {
+          const responseFind = termsSearchPmid.find((term) => eleEnites.term_id === term)
+          if (!responseFind) termsSearch = false
+        }
+
+        return termsSearch &&
           eleEnites.entity_pmid == rule.pmid_article &&
           eleEnites.start_pos >= startRule && eleEnites.end_pos <= endRule &&
           Redirect[nameEntitie] === "indexPolifenols"
@@ -56,7 +73,14 @@ function Rakend() {
     const entity_sentence_genes = entities.filter(
       (eleEnites) => {
         const nameEntitie: keyof typeof Redirect = eleEnites.entity_type as ClassificartionGene
-        return eleEnites.entity_pmid == rule.pmid_article &&
+
+        let termsSearch = true;
+        if (typeConsult === "G" || typeConsult == "PG") {
+          const responseFind = termsSearchPmid.find((term) => eleEnites.term_id === term)
+          if (!responseFind) termsSearch = false
+        }
+
+        return termsSearch && eleEnites.entity_pmid == rule.pmid_article &&
           eleEnites.start_pos >= startRule && eleEnites.end_pos <= endRule &&
           Redirect[nameEntitie] === "indexGene"
       }
@@ -106,6 +130,7 @@ function Rakend() {
     else if (entity_sentence_polifenol.length > 0) {
       peso_genes = calc_peso_polifenol_gene(rule);
       peso_frase = calc_peso_polifenol(rule)
+
     } else if (entity_sentence_cancer) {
       peso_genes = 0
       peso_frase = calc_peso_polifenol(rule)
