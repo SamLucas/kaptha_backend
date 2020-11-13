@@ -19,9 +19,12 @@ function Normalization() {
 
     const partUp = x - min
     const partDown = max - min
-    const result = partUp / partDown
 
-    return result
+    if (partDown === 0) return x;
+    else {
+      const result = partUp / partDown
+      return result
+    }
   }
 
   const _changedToPrecision = (x: Number, numberCase: number) =>
