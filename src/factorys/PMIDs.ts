@@ -73,7 +73,7 @@ function PMIDs() {
     if (termsIdsOne.length > 0 && termsIdsTwo.length > 0)
       return _.intersection(termsIdsOne, termsIdsTwo)
 
-    else if (termsIdsOne.length > 0 && termsIdsTwo.length > 0)
+    else if (termsIdsOne.length > 0 && termsIdsThere.length > 0)
       return _.intersection(termsIdsOne, termsIdsThere)
 
     else return [...termsIdsOne, ...termsIdsTwo, ...termsIdsThere]
