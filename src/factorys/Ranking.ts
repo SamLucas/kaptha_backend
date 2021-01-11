@@ -51,40 +51,42 @@ function Rakend() {
       }
     );
 
-    const entity_sentence_polifenol = entities.filter(
-      (eleEnites) => {
+    const entity_sentence_polifenol = entities.filter((eleEnites) => {
 
-        let nameEntitie: keyof typeof Redirect;
-        nameEntitie = eleEnites.entity_type as ClassificartionGene
+      let nameEntitie: keyof typeof Redirect;
+      nameEntitie = eleEnites.entity_type as ClassificartionGene
 
-        let termsSearch = true;
-        if (typeConsult === "P" || typeConsult == "PC" || typeConsult == "PG") {
-          const responseFind = termsSearchPmid.find((term) => eleEnites.term_id === term)
-          if (!responseFind) termsSearch = false
-        }
-
-        return termsSearch &&
-          eleEnites.entity_pmid == rule.pmid_article &&
-          eleEnites.start_pos >= startRule && eleEnites.end_pos <= endRule &&
-          Redirect[nameEntitie] === "indexPolifenols"
+      let termsSearch = true;
+      if (typeConsult === "P" || typeConsult == "PC" || typeConsult == "PG") {
+        const responseFind = termsSearchPmid.find((term) => eleEnites.term_id === term)
+        if (!responseFind) termsSearch = false
       }
+
+      return termsSearch &&
+        eleEnites.entity_pmid == rule.pmid_article &&
+        eleEnites.start_pos >= startRule && eleEnites.end_pos <= endRule &&
+        Redirect[nameEntitie] === "indexPolifenols"
+
+    });
+
+    const entity_sentence_genes = entities.filter((eleEnites) => {
+
+      let nameEntitie: keyof typeof Redirect;
+      nameEntitie = eleEnites.entity_type as ClassificartionGene
+
+      let termsSearch = true;
+      if (typeConsult === "G" || typeConsult == "PG") {
+        const responseFind = termsSearchPmid.find((term) => eleEnites.term_id === term)
+        if (!responseFind) termsSearch = false
+      }
+
+      return termsSearch && eleEnites.entity_pmid == rule.pmid_article &&
+        eleEnites.start_pos >= startRule && eleEnites.end_pos <= endRule &&
+        Redirect[nameEntitie] === "indexGene"
+    }
     );
 
-    const entity_sentence_genes = entities.filter(
-      (eleEnites) => {
-        const nameEntitie: keyof typeof Redirect = eleEnites.entity_type as ClassificartionGene
-
-        let termsSearch = true;
-        if (typeConsult === "G" || typeConsult == "PG") {
-          const responseFind = termsSearchPmid.find((term) => eleEnites.term_id === term)
-          if (!responseFind) termsSearch = false
-        }
-
-        return termsSearch && eleEnites.entity_pmid == rule.pmid_article &&
-          eleEnites.start_pos >= startRule && eleEnites.end_pos <= endRule &&
-          Redirect[nameEntitie] === "indexGene"
-      }
-    );
+    // console.log(typeConsult)
 
     const ArrayEttiesAux = [
       ...entity_sentence_other_cancers,
@@ -106,10 +108,10 @@ function Rakend() {
 
 
   function weightCalculationInSentences(
-    entity_sentence_polifenol: EntitiesInterface[],
-    entity_sentence_cancer: EntitiesInterface[],
-    entity_sentence_other_cancers: EntitiesInterface[],
-    entity_sentence_genes: EntitiesInterface[],
+    entity_sentence_polifenol: EntitiesInterface[] = [],
+    entity_sentence_cancer: EntitiesInterface[] = [],
+    entity_sentence_other_cancers: EntitiesInterface[] = [],
+    entity_sentence_genes: EntitiesInterface[] = [],
     rule: RuleInterface
   ) {
 
@@ -120,29 +122,38 @@ function Rakend() {
       entity_sentence_polifenol.length > 0 &&
       entity_sentence_cancer.length > 0
     ) {
-      peso_genes = calc_peso_polifenol_gene(rule);
+      // peso_genes = calc_peso_polifenol_gene(rule);
+      peso_genes = entity_sentence_polifenol.length + entity_sentence_cancer.length
       peso_frase = calc_peso_polifenol_cancer(rule);
     } else if (entity_sentence_polifenol.length > 0 &&
       entity_sentence_other_cancers.length > 0) {
-      peso_genes = calc_peso_polifenol_gene(rule);
+      // peso_genes = calc_peso_polifenol_gene(rule);
+      peso_genes = entity_sentence_polifenol.length + entity_sentence_other_cancers.length
       peso_frase = calc_peso_polifenol(rule)
     }
     else if (entity_sentence_polifenol.length > 0) {
-      peso_genes = calc_peso_polifenol_gene(rule);
+      // peso_genes = calc_peso_polifenol_gene(rule);
+      peso_genes = entity_sentence_polifenol.length;
       peso_frase = calc_peso_polifenol(rule)
 
-    } else if (entity_sentence_cancer) {
-      peso_genes = 0
+    } else if (entity_sentence_cancer.length > 0) {
+      peso_genes = entity_sentence_cancer.length
       peso_frase = calc_peso_polifenol(rule)
     }
     else if (entity_sentence_other_cancers.length > 0) {
-      peso_genes = 0
+      peso_genes = entity_sentence_other_cancers.length
       peso_frase = calc_peso_gene(rule)
     }
     else if (entity_sentence_genes.length > 0) {
-      peso_genes = calc_peso_polifenol_gene(rule)
+      // peso_genes = calc_peso_polifenol_gene(rule)
+      peso_genes = entity_sentence_genes.length
       peso_frase = calc_peso_polifenol(rule)
     }
+
+    peso_frase === 0 && console.log(entity_sentence_polifenol.length,
+      entity_sentence_cancer.length,
+      entity_sentence_other_cancers.length,
+      entity_sentence_genes.length)
 
     return { peso_genes, peso_frase }
   }

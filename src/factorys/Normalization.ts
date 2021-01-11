@@ -6,7 +6,7 @@ function Normalization() {
   ) {
     const { max, min } = data
     return {
-      min: Math.min(...[min, value]),
+      min: Math.min(...[0, value]),
       max: Math.max(...[max, value]),
     };
   }

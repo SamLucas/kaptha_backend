@@ -127,20 +127,18 @@ const index = async (req: Request, res: Response) => {
 
             const newRules = rules.map((rule: RulesInterface) => {
 
-              const responseRankedEntities = RankingOfEntities.filterSearchEntities(
-                entities,
-                rule,
-                termsSearchPmid,
-                typeConsult
-              )
-
               const {
                 entitiesRules,
                 entity_sentence_cancer,
                 entity_sentence_genes,
                 entity_sentence_other_cancers,
                 entity_sentence_polifenol
-              } = responseRankedEntities
+              } = RankingOfEntities.filterSearchEntities(
+                entities,
+                rule,
+                termsSearchPmid,
+                typeConsult
+              )
 
               const { peso_frase, peso_genes } =
                 RankingOfEntities.weightCalculationInSentences(
