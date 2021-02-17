@@ -34,7 +34,20 @@ const searchTermCancer = async (req: Request, res: Response): Promise<Response> 
     })
     .select(["db_equivalence as label", "db_term as labelTerm"])
     .then((data) => {
-      return res.status(200).json(data);
+      const dataLowerCase = data.map(e => ({
+        label: e.label.toLowerCase(),
+        labelTerm: e.labelTerm.toLowerCase(),
+      }))
+
+      let put: any = [];
+
+      dataLowerCase.forEach(e => {
+        if (!put.find(p => p.label === e.label))
+          put.push(e);
+      })
+
+
+      return res.status(200).json(put);
     })
     .catch((err) => {
       console.log(err);
