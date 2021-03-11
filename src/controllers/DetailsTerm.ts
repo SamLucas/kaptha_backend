@@ -15,7 +15,7 @@ function getDetailsTerm() {
 
     const { entity_type, term_id, mesh_id } = req.query;
 
-    console.log(entity_type, term_id, mesh_id)
+    // console.log(entity_type, term_id, mesh_id)
 
     const indexRedirect: keyof typeof Redirect = entity_type as ClassificartionGene
     const typeFuction = Redirect[indexRedirect]

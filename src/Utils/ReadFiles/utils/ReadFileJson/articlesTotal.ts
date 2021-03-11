@@ -46,7 +46,7 @@ export default async function FRArticlesTotal(data: DRArticlesTotal[]): Promise<
     }
   })
 
-  console.log(dataFilter[0])
+  // console.log(dataFilter[0])
 
   await knex.batchInsert('articlesTotal', dataFilter, 1)
     .then(data => data)

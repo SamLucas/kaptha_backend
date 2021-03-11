@@ -36,7 +36,7 @@ export default async function FREntitiesTotal(
   let currentPage = 0;
   const limitPag = 10000
 
-  console.log(response.length)
+  // console.log(response.length)
 
   while ((currentPage + 1) * limitPag < response.length) {
 
@@ -48,7 +48,7 @@ export default async function FREntitiesTotal(
       .then((data) => data)
       .catch(console.error);
 
-    console.log(currentPage, dataPerPag.length)
+    // console.log(currentPage, dataPerPag.length)
   }
 
   const rest = response.slice(currentPage * limitPag)
@@ -58,6 +58,6 @@ export default async function FREntitiesTotal(
       .then((data) => data)
       .catch(console.error);
 
-    console.log(currentPage, rest.length)
+    // console.log(currentPage, rest.length)
   }
 }

@@ -150,10 +150,10 @@ function Rakend() {
       peso_frase = calc_peso_polifenol(rule)
     }
 
-    peso_frase === 0 && console.log(entity_sentence_polifenol.length,
-      entity_sentence_cancer.length,
-      entity_sentence_other_cancers.length,
-      entity_sentence_genes.length)
+    // peso_frase === 0 && console.log(entity_sentence_polifenol.length,
+    //   entity_sentence_cancer.length,
+    //   entity_sentence_other_cancers.length,
+    //   entity_sentence_genes.length)
 
     return { peso_genes, peso_frase }
   }

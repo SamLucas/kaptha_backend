@@ -9,7 +9,7 @@ export const handlePagination = async (response: any[], limitPag = 10000, nameTa
   if (nameTable === "") return
 
   let currentPage = 0;
-  console.log(response.length)
+  // console.log(response.length)
 
   while ((currentPage + 1) * limitPag < response.length) {
 
@@ -21,7 +21,7 @@ export const handlePagination = async (response: any[], limitPag = 10000, nameTa
       .then((data) => data)
       .catch(console.error);
 
-    console.log(currentPage, dataPerPag.length)
+    // console.log(currentPage, dataPerPag.length)
   }
 
   const rest = response.slice(currentPage * limitPag)
@@ -31,6 +31,6 @@ export const handlePagination = async (response: any[], limitPag = 10000, nameTa
       .then((data) => data)
       .catch(console.error);
 
-    console.log(currentPage + 1, rest.length)
+    // console.log(currentPage + 1, rest.length)
   }
 }

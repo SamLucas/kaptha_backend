@@ -32,22 +32,25 @@ const searchTermCancer = async (req: Request, res: Response): Promise<Response> 
       ]);
       this.whereIn("entity_type", entity);
     })
-    .select(["db_equivalence as label", "db_term as labelTerm"])
+    .select(["db_equivalence as label", "db_term as labelTerm", "entity_type"])
     .then((data) => {
-      const dataLowerCase = data.map(e => ({
-        label: e.label.toLowerCase(),
-        labelTerm: e.labelTerm.toLowerCase(),
-      }))
 
-      let put: any = [];
+      if (TypeConsult.toLowerCase() === "gene") {
 
-      dataLowerCase.forEach(e => {
-        if (!put.find(p => p.label === e.label))
-          put.push(e);
-      })
+        const dataLowerCase = data.map(e => ({
+          label: e.label.toLowerCase(),
+          labelTerm: e.labelTerm.toLowerCase(),
+        }))
 
+        let put: any = [];
 
-      return res.status(200).json(put);
+        dataLowerCase.forEach(e => {
+          if (!put.find(p => p.label === e.label))
+            put.push(e);
+        })
+
+        return res.status(200).json(put);
+      } else return res.status(200).json(data);
     })
     .catch((err) => {
       console.log(err);

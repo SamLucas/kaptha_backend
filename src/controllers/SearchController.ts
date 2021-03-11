@@ -31,7 +31,7 @@ const index = async (req: Request, res: Response) => {
     dataSearchGene as String
   )
 
-  console.log(terms);
+  console.log(terms, typeConsult);
 
   await knex.transaction(async trx => {
 
@@ -47,6 +47,12 @@ const index = async (req: Request, res: Response) => {
           dataTermsGeneEntitie,
           dataTermsGeneHGNC,
         } = PMIDs._getPMIDs(data)
+
+        console.log(termsSearchPmid,
+          dataTermsCancer,
+          dataTermsPolifenols,
+          dataTermsGeneEntitie,
+          dataTermsGeneHGNC)
 
 
         const [articlesPolifenols] =
